@@ -43,6 +43,10 @@ void	*routine()
 
 	What we could do to eveitate that is
 	creating an array of threads
+	Like showned bellow
+	NOTE THAT THIS METHOD WILL NOT PERMIT PARRALLELISM
+	It would create a first thread ; run it and then start over with the second
+	Look further in the page to see the 
 */
 int main(int argc, char **argv)
 {
