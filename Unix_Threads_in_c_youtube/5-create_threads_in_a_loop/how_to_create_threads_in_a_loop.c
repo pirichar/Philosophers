@@ -48,11 +48,42 @@ void	*routine()
 	It would create a first thread ; run it and then start over with the second
 	Look further in the page to see the 
 */
+// int main(int argc, char **argv)
+// {
+// 	pthread_t th[4];
+// 	pthread_mutex_init(&mutex, NULL);
+// 	for (int i = 0; i < 4; i++)
+// 	{
+// 		if (pthread_create(&th[i], NULL, &routine, NULL) != 0)
+// 		{
+// 			perror("Failed to create thread");
+// 			return (1);
+// 		}
+// 		printf("Thread %d has started\n", i);
+// 		if (pthread_join(th[i],NULL) != 0)
+// 			return (2);
+// 		printf("Thread %d has finished its execution\n", i);
+// 	}
+// 	printf("Number of mails : %d\n", mails);
+// 	pthread_mutex_destroy(&mutex);
+// 	return (0);
+// }
+
+
+/*
+	The correct way of doing this is not in the same looop
+	Since you always create the first thread and join it 
+	After that only can the second thread start its execution
+	This is exactly not the way to create a thread in a for loop
+
+	The way to do is to do it in another for loop 
+*/
 int main(int argc, char **argv)
 {
-	pthread_t th[4];
+	int t = 8;
+	pthread_t th[t];
 	pthread_mutex_init(&mutex, NULL);
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < t; i++)
 	{
 		if (pthread_create(&th[i], NULL, &routine, NULL) != 0)
 		{
@@ -60,6 +91,10 @@ int main(int argc, char **argv)
 			return (1);
 		}
 		printf("Thread %d has started\n", i);
+
+	}
+	for (int i = 0; i < t; i++)
+	{
 		if (pthread_join(th[i],NULL) != 0)
 			return (2);
 		printf("Thread %d has finished its execution\n", i);
