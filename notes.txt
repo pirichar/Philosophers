@@ -1,0 +1,12 @@
+1- How can you create a mutex without it being a global variable ?
+	do you pass it with the pthread_create function as the arg of the routine ?
+	Maybe I can initialise it in a struct ??
+
+2- comment je vias me servir de pthread_detach si je ne peux pas me servir de pthread_exit(0) ??
+
+3- I should probably create a struct for each philosopher
+	it could contain :
+				A) Another struct with the states ; eating; thinking ; sleeping; dead;
+				B)
+
+4-
