@@ -22,13 +22,24 @@ int water = 10;
 */
 void	*routine(void *arg)
 {
-	pthread_mutex_lock(&mutexFuel);
-	pthread_mutex_lock(&mutexWater);
-	fuel += 50;
-	water = fuel;
-	printf("Incemented fuel to : %d set water to %d\n", fuel, water);
-	pthread_mutex_unlock(&mutexFuel);
-	pthread_mutex_unlock(&mutexWater);
+	if (rand () % 2 == 0)
+	{
+		pthread_mutex_lock(&mutexFuel);
+		sleep(1);
+		pthread_mutex_lock(&mutexWater);
+	}
+	else
+	{
+		pthread_mutex_lock(&mutexWater);
+		sleep(1);
+		pthread_mutex_lock(&mutexFuel);
+	}
+		fuel += 50;
+		water = fuel;
+		printf("Incemented fuel to : %d set water to %d\n", fuel, water);
+		pthread_mutex_unlock(&mutexFuel);
+		pthread_mutex_unlock(&mutexWater);
+	
 	return (NULL);
 }
 
