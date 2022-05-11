@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/10 13:57:10 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/10 14:27:46 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@
 */
 void 	*rountine()
 {
-
+	//eat  and wait till time to eat is done
+	//sleep and wait till time to sleep is done
+	//think and wait to die
 	return (NULL);
 }
 
@@ -64,6 +66,10 @@ int ft_atoi(char *str)
 
 
 //maybe I should separate the pthread_join side of this function to something else; lets see
+// for now this function takes as input the arguments but could only take argv[1]
+//then it mallocs an array to put my threads into with the atoi of argv[1]
+// I could probably init the forks here as well ?
+// Should I get the output of pthread_Create and assign that to a philo as I create them ?
 int	init_philos(char **argv, t_pgm *pg)
 {
 	pg->nb_philos = ft_atoi(argv[1]);
@@ -131,6 +137,9 @@ int main(int argc, char **argv)
 		//also you can use the number of philosophers to create the ammount of forks (mutex)
 		if (init_philos(argv, &pg) != 0)
 			return (1);
+		//maybe I init the number of fork here ? 
+		//there is one work in between each philosopher so if there is 2 there will be 2 fork;
+		// that means that exept if there is one philosopher whtere will be the same amount of philo as the amount of fork
 		free(pg.th);
 	}
 	else
