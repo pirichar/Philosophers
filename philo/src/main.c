@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/11 15:53:47 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/12 15:12:57 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,16 @@
 			et le phislosophe n + 1;
 */
 
-void 	*rountine()
+
+
+
+void 	*rountine(void *ptr)
 {
+	//usleep est en MICRO SECONDE 
+	t_philo *p = ptr;
+	pthread_mutex_lock(p->fork_left);
+	printf("This is from within the lock\n");
+	pthread_mutex_unlock(p->fork_left);
 // • Les philosophes sont soit en train de manger, de penser ou de dormir.
 // Lorsqu’ils mangent, ils ne peuvent pas penser ou dormir.
 // Lorsqu’ils dorment, ils ne peuvent pas manger ou penser.
@@ -38,8 +46,12 @@ void 	*rountine()
 // 3- Une fois réveillé, il se remet à penser et il doit manger avant time to die
 // La simulation prend fin si un philosophe meurt de faim.
 	//eat  and wait till time to eat is done
+		//to eat a philosopher must have access to his mutex and the mutex before him
+		//it will eat for time_to_eat
 	//sleep and wait till time to sleep is done
+		//the philosopher will sleep for time_to_sleep
 	//think and wait to die
+		//the philosopher will think for time_to_die
 	return (NULL);
 }
 
@@ -89,7 +101,6 @@ int	validate_input(int argc, char **argv)
 	i = 1;
 	while(i < argc)
 	{
-		printf("This is argc %d this is i %d\n", argc, i);
 		if (check_int(argv[i]) != 0)
 		{
 			printf("Every argument should be an int\n");
@@ -105,7 +116,7 @@ int	validate_input(int argc, char **argv)
 	return (0);
 }
 
-int	parse_input(int argc, char **argv, t_pgm *pg)
+int	parse_and_initiate(int argc, char **argv, t_pgm *pg)
 {
 	if (validate_input(argc, argv) != 0)
 		return (1);
@@ -118,23 +129,38 @@ int	parse_input(int argc, char **argv, t_pgm *pg)
 	pg->time_to_die = ft_atoi(argv[2]);
 	pg->time_to_eat = ft_atoi(argv[3]);
 	pg->time_to_sleep = ft_atoi(argv[4]);
-	printf("This is the number of philo provided %d\n", pg->nb_philos);
-	pg->th = malloc(sizeof(pthread_t) * pg->nb_philos + 1); // the + 1 is for the extra process to monitor
+	printf("Values provided by the user = \n--------------------------\n");
+	printf("This is the number of philo %d\n", pg->nb_philos);
+	printf("This is the number of fork %d\n", pg->nb_fork);
+	printf("This is the time to die %zu\n", pg->time_to_die);
+	printf("This is the time to eat %zu\n", pg->time_to_eat);
+	printf("This is the time to sleep %zu\n", pg->time_to_sleep);
+	printf("This is time NB time to eat %d\n",pg->nb_time_to_eat);
+	printf("--------------------------\n");
+	pg->th = malloc(sizeof(pthread_t) * (pg->nb_philos)); // the + 1 is for the extra process to monitor but actually now I use it because I start at 1 instead of 0
+	pg->philos = malloc(sizeof(t_philo) * (pg->nb_philos));
+	pg->forks = malloc(sizeof(pthread_mutex_t) * pg->nb_fork); //here I allocated an array of mutex
 	return (0);
 }
 
-//maybe I should separate the pthread_join side of this function to something else; lets see
-// for now this function takes as input the arguments but could only take argv[1]
-//then it mallocs an array to put my threads into with the atoi of argv[1]
-// I could probably init the forks here as well ?
-// Should I get the output of pthread_Create and assign that to a philo as I create them ?
-int	init_philos(t_pgm *pg)
+int	create_philos_n_mutex(t_pgm *pg)
 {
 	//I should probablt init the right fork each time
-	pg->i = 0;
+	pg->i = -1;
+	while(++pg->i <= pg->nb_fork)
+	{
+		pg->philos[pg->i].nb_time_eaten = 0;
+		pg->philos[pg->i].is_dead = false;
+		pg->philos[pg->i].id = pg->i + 1;
+		pg->philos[pg->i].pgm = pg;
+		pg->philos[pg->i].fork_left = &pg->forks[pg->i];
+		pg->philos[pg->i].fork_left = &pg->forks[pg->i + 1 % pg->nb_philos];
+		pthread_mutex_init(&pg->forks[pg->i], NULL);
+	}
+	pg->i = -1;
 	while (++pg->i <= pg->nb_philos)
 	{
-		if (pthread_create(&pg->th[pg->i], NULL, &rountine, NULL) != 0)
+		if (pthread_create(&pg->th[pg->i], NULL, &rountine, &pg->philos[pg->i]) != 0)
 		{
 			printf("Failed to create thread\n");
 			return (1);
@@ -151,22 +177,39 @@ int	init_philos(t_pgm *pg)
 	return (0);
 }
 
+//après avoir tout initialiser je devrais caller get_time pour avoir le time stamp i
+long	get_time()
+{
+	long rtn;
+	
+	rtn = 0;
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	rtn = rtn + (tv.tv_sec * 1000);
+	rtn = rtn + (tv.tv_usec / 1000);
+
+	return (rtn);
+}
 int main(int argc, char **argv)
 {
 	t_pgm pg;
 
 	if (argc == 5 || argc == 6)
 	{		
-		//here I should or COULD par the whole input and return different stuff
-		//if the value of my return is not 0 I could exit or something like that
-		//I could also print the errors into the parse function
-		if (parse_input(argc, argv, &pg) != 0)
+		if (parse_and_initiate(argc, argv, &pg) != 0)
 			return (1);
-		if (init_philos(&pg) != 0)
+		if (create_philos_n_mutex(&pg) != 0)
 			return (2);
-		//there is one work in between each philosopher so if there is 2 there will be 2 fork;
-		// that means that exept if there is one philosopher whtere will be the same amount of philo as the amount of fork
+		//check le state le state de tout le monde	
 		free(pg.th);
+		free(pg.forks);
+		free(pg.philos);
+		pg.i = 0;
+		while(pg.i < pg.nb_fork)
+		{
+			pthread_mutex_destroy(&pg.forks[pg.i]);
+			pg.i++;
+		}
 	}
 	else
 		printf("Not enough args to run the program\n");
