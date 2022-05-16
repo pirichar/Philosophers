@@ -2,4 +2,4 @@
 
 
 gcc -Wall -Werror -Wextra ./src/*.c
-./a.out 6 400 400 400 5 
+./a.out 2 400 400 400 5 
