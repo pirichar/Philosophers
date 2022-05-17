@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/16 11:35:45 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/16 20:37:26 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <sys/time.h>
 # include <stdbool.h>
 # include <unistd.h>
+# include "./colors.h"
 
 typedef struct s_philo	t_philo;
 // typedef struct s_time t_time;
@@ -27,6 +28,7 @@ typedef struct s_time
 {
 	long	initial_time;
 	long	time_atm;
+	long	start_thinking;
 }				t_time;
 
 typedef struct s_pgm

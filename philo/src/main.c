@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/16 11:40:12 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/16 20:39:08 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,52 @@
 		//the philosopher will think for time_to_die
 
 //***usleep est en MICRO SECONDE***
+//***LE USER ME DONNE EN MILISECONDE LES TEMPS**
+//***CHACUN DES CHIFFRES DOIT ETRE MULTIPLIER PAR 1000***
 void	*rountine(void *ptr)
 {
 	t_philo	*p;
 
 	p = ptr;
-	pthread_mutex_lock(p->fork_left);
-	pthread_mutex_lock(p->fork_right);
-	p->pgm->time.time_atm = get_time();
-	printf("Philo %d\n as starten to eat at time : %lu\n",
-		p->id, ((p->pgm->time.initial_time - p->pgm->time.time_atm)));
-	sleep(5);
-	pthread_mutex_unlock(p->fork_left);
-	pthread_mutex_unlock(p->fork_right);
+	while(1)
+	{
+		//eat
+		//fork left
+		if (p->nb_time_eaten == p->pgm->nb_time_to_eat)
+			break;
+		pthread_mutex_lock(p->fork_left);
+		p->pgm->time.time_atm = get_time();
+		printf(HGRN"%ld %d has taken a fork\n"RESET,
+		(p->pgm->time.time_atm - p->pgm->time.initial_time),p->id);
+		//fork right
+		pthread_mutex_lock(p->fork_right);
+		p->pgm->time.time_atm = get_time();
+		printf(HGRN"%ld %d has taken a fork\n"RESET,
+		(p->pgm->time.time_atm - p->pgm->time.initial_time),p->id);
+		//Eating
+		p->pgm->time.time_atm = get_time();
+		printf(HBLU"%ld %d is eating and has eat %d times\n"RESET,
+			(p->pgm->time.time_atm - p->pgm->time.initial_time),p->id, p->nb_time_eaten);
+		usleep(p->pgm->time_to_eat * 1000);
+		p->nb_time_eaten++;
+		//Unlocking forks
+		pthread_mutex_unlock(p->fork_left);
+		pthread_mutex_unlock(p->fork_right);
+
+		//sleep
+		p->pgm->time.time_atm = get_time();
+		printf(HMAG"%ld %d is sleeping\n"RESET,
+			(p->pgm->time.time_atm - p->pgm->time.initial_time),p->id);
+		usleep(p->pgm->time_to_sleep * 1000);
+		//Think
+		//Need to find a logic here
+		p->pgm->time.start_thinking = get_time();
+		printf(HRED"%ld %d is thiking\n"RESET,
+			(p->pgm->time.start_thinking - p->pgm->time.initial_time),p->id);
+		//maybe i create a variable that i update from the time after ive eaten and the time where i stand
+		//if my variable is equal to time_to_die then my philo is dead 
+
+	}
 	return (NULL);
 }
 
@@ -94,7 +127,6 @@ int	main(int argc, char **argv)
 	if (argc == 5 || argc == 6)
 	{	
 		pg.time.initial_time = get_time();
-		printf("This is the time at start %lu\n", pg.time.initial_time);
 		if (parse_and_initiate(argc, argv, &pg) != 0)
 			return (1);
 		if (create_philos_n_mutex(&pg) != 0)
