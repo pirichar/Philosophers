@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/16 20:37:26 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/17 13:51:47 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ typedef struct s_pgm
 	pthread_mutex_t	*forks;
 	int				i;
 	t_philo			*philos;
-	size_t			time_to_eat;
-	size_t			time_to_sleep;
-	size_t			time_to_die;
+	long			time_to_eat;
+	long			time_to_sleep;
+	long			time_to_die;
 	int				nb_time_to_eat;
 	bool			game_over;
 	t_time			time;
@@ -66,5 +66,6 @@ int		parse_and_initiate(int argc, char **argv, t_pgm *pg);
 
 //time.c
 long	get_time(void);
+void	ft_sleep(long time_to_sleep);
 
 #endif
