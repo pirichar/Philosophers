@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/17 15:16:11 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/18 11:37:22 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ typedef struct s_pgm
 	bool			max_eat;
 	long			time_to_sleep;
 	long			time_to_die;
+	long			start_time;
+	long			actual_time;
 	int				nb_time_to_eat;
 	bool			game_over;
 	t_time			time;

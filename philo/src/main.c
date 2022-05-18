@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/17 20:00:41 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/18 11:41:22 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,21 @@ void	print_status(t_philo *p, char status)
 }
 
 
+void	print_time(t_philo *p)
+{
+	printf("This is the start time %ld\n",(p->pgm->start_time - p->pgm->time.initial_time));
+	printf("This is time to die %ld\n",(p->pgm->time_to_die));
+	printf("This is the actual time %ld\n",(p->pgm->actual_time - p->pgm->time.initial_time));
+	printf("This is the start time + time_to_die = %ld\nthis is actual time = %ld\n",
+	((p->pgm->start_time - p->pgm->time.initial_time) + p->pgm->time_to_die),(p->pgm->actual_time - p->pgm->time.initial_time));
+}
 
 void	*rountine(void *ptr)
 {
 	t_philo	*p;
-	long	start_time;
-	long	actual_time;
-
 
 	p = ptr;
-	start_time = get_time();
+	p->pgm->start_time = get_time();
 	while (1)
 	{
 		if (p->pgm->max_eat == true)
@@ -87,7 +92,7 @@ void	*rountine(void *ptr)
 		print_status(p, 'r');
 		//Eating
 		print_status(p, 'e');
-		start_time = get_time();
+		p->pgm->start_time = get_time();
 		ft_sleep(p->pgm->time_to_eat);
 		//Unlocking forks
 		pthread_mutex_unlock(p->fork_left);
@@ -97,18 +102,14 @@ void	*rountine(void *ptr)
 		ft_sleep(p->pgm->time_to_sleep);
 		//Think
 		print_status(p, 't');
-		actual_time = get_time();
-		if ( actual_time >= start_time + p->pgm->time_to_die )
+		p->pgm->actual_time = get_time();
+		print_time(p);
+		if ( p->pgm->actual_time >= p->pgm->start_time + p->pgm->time_to_die )
 		{
 			print_status(p, 'd');
 			p->is_dead = true;
 			break;
 		}	
-		printf("This is the start time %ld\n",(start_time - p->pgm->time.initial_time));
-		printf("This is time to die %ld\n",(p->pgm->time_to_die));
-		printf("This is the actual time %ld\n",(actual_time - p->pgm->time.initial_time));
-		printf("This is the start time + time_to_die and actual time \n%ld \n %ld \n",
-			((start_time - p->pgm->time.initial_time) + p->pgm->time_to_die),(actual_time - p->pgm->time.initial_time));
 
 	}
 	return (NULL);
@@ -159,9 +160,9 @@ int	main(int argc, char **argv)
 
 	if (argc == 5 || argc == 6)
 	{	
-		pg.time.initial_time = get_time();
 		if (parse_and_initiate(argc, argv, &pg) != 0)
 			return (1);
+		pg.time.initial_time = get_time();
 		if (create_philos_n_mutex(&pg) != 0)
 			return (2);
 		//check le state le state de tout le monde	
