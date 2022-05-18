@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/17 14:03:36 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/17 20:00:41 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,8 @@ void	print_status(t_philo *p, char status)
 			(p->pgm->time.start_thinking - p->pgm->time.initial_time), p->id);
 	if (status == 'd')
 		printf(HRED"%ld %d is dead\n"RESET,
-			(p->pgm->time.start_thinking - p->pgm->time.initial_time), p->id);
+			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id);
 }
-
 
 
 
@@ -75,40 +74,41 @@ void	*rountine(void *ptr)
 
 
 	p = ptr;
-	usleep(400); 
 	start_time = get_time();
 	while (1)
 	{
-		actual_time = get_time();
-		if (start_time + p->pgm->time_to_die == actual_time)
-		{
-			print_status(p, 'd');
-			p->is_dead = true;
-		}
-		if (p->nb_time_eaten == p->pgm->nb_time_to_eat || p->is_dead == true)
-			break;
-		//fork left
+		if (p->pgm->max_eat == true)
+			if (p->nb_time_eaten >= p->pgm->nb_time_to_eat) 
+				break;	
+		//forks
 		pthread_mutex_lock(p->fork_left);
 		print_status(p, 'l');
-		//fork right
 		pthread_mutex_lock(p->fork_right);
 		print_status(p, 'r');
 		//Eating
 		print_status(p, 'e');
-		// usleep(p->pgm->time_to_eat * 1000);
+		start_time = get_time();
 		ft_sleep(p->pgm->time_to_eat);
 		//Unlocking forks
 		pthread_mutex_unlock(p->fork_left);
 		pthread_mutex_unlock(p->fork_right);
 		//sleep
 		print_status(p, 's');
-		// usleep(p->pgm->time_to_sleep * 1000);
 		ft_sleep(p->pgm->time_to_sleep);
 		//Think
 		print_status(p, 't');
-		//Need to find a logic here to validate if the philo is dead
-		//maybe i create a variable that i update from the time after ive eaten and the time where i stand
-		//if my variable is equal to time_to_die then my philo is dead 
+		actual_time = get_time();
+		if ( actual_time >= start_time + p->pgm->time_to_die )
+		{
+			print_status(p, 'd');
+			p->is_dead = true;
+			break;
+		}	
+		printf("This is the start time %ld\n",(start_time - p->pgm->time.initial_time));
+		printf("This is time to die %ld\n",(p->pgm->time_to_die));
+		printf("This is the actual time %ld\n",(actual_time - p->pgm->time.initial_time));
+		printf("This is the start time + time_to_die and actual time \n%ld \n %ld \n",
+			((start_time - p->pgm->time.initial_time) + p->pgm->time_to_die),(actual_time - p->pgm->time.initial_time));
 
 	}
 	return (NULL);
