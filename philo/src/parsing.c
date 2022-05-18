@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 11:27:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/17 20:00:21 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/18 15:10:35 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,18 +93,6 @@ int	validate_input(int argc, char **argv)
 		i++;
 	}
 	return (0);
-}
-
-void	print_initiation(t_pgm *pg)
-{
-	printf("Values provided by the user = \n--------------------------\n");
-	printf("This is the number of philo %d\n", pg->nb_philos);
-	printf("This is the number of fork %d\n", pg->nb_fork);
-	printf("This is the time to die %zu\n", pg->time_to_die);
-	printf("This is the time to eat %zu\n", pg->time_to_eat);
-	printf("This is the time to sleep %zu\n", pg->time_to_sleep);
-	printf("This is time NB time to eat %d\n", pg->nb_time_to_eat);
-	printf("--------------------------\n");
 }
 
 int	parse_and_initiate(int argc, char **argv, t_pgm *pg)

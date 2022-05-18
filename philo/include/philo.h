@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 14:23:46 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/18 15:10:56 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,15 @@ typedef struct s_philo
 	pthread_mutex_t	*fork_right;
 }				t_philo;
 
+
+//main.c
+void	*rountine(void *ptr);
+
+//print.c
+void	print_time(t_philo *p);
+void	print_status(t_philo *p, char status);
+void	print_initiation(t_pgm *pg);
+
 //parse.c
 int		ft_atoi(char *str);
 int		check_int(char *str);
@@ -71,7 +80,10 @@ int		parse_and_initiate(int argc, char **argv, t_pgm *pg);
 //time.c
 long	get_time(void);
 void	ft_sleep(long time_to_sleep);
-void	print_time(t_philo *p);
-void	print_status(t_philo *p, char status);
+
+//create.c
+void	create_philos(t_pgm *pg);
+int	create_philos_n_mutex(t_pgm *pg);
+
 
 #endif

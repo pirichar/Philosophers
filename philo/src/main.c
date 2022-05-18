@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 14:31:55 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/18 15:30:17 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 //***LE USER ME DONNE EN MILISECONDE LES TEMPS**
 //***CHACUN DES CHIFFRES DOIT ETRE MULTIPLIER PAR 1000***
 
-void	take_forks_and_eat(t_philo *p)
+static void	take_forks_and_eat(t_philo *p)
 {
 	pthread_mutex_lock(p->fork_left);
 	print_status(p, 'l');
@@ -49,6 +49,7 @@ void	take_forks_and_eat(t_philo *p)
 	pthread_mutex_unlock(p->fork_right);
 
 }
+
 void	*rountine(void *ptr)
 {
 	t_philo	*p;
@@ -60,7 +61,11 @@ void	*rountine(void *ptr)
 		p->pgm->actual_time = get_time();	
 		if (p->pgm->max_eat == true)
 			if (p->nb_time_eaten >= p->pgm->nb_time_to_eat) 
+			{
+				p->is_full = 1;//probablement que ici je devrais me faire un array avec mes is_full
+								//pour tout mes philos
 				break;
+			}
 		//forks
 		take_forks_and_eat(p);
 		//sleep
@@ -68,57 +73,58 @@ void	*rountine(void *ptr)
 		ft_sleep(p->pgm->time_to_sleep);
 		//Think
 		print_status(p, 't');
-		print_time(p);
-		p->pgm->actual_time = get_time();		
-		if ( p->pgm->actual_time >= p->pgm->start_time + p->pgm->time_to_die )
+		p->pgm->actual_time = get_time();	
+		// print_time(p);	
+		if (p->pgm->actual_time >= p->pgm->start_time + p->pgm->time_to_die)
 		{
 			print_status(p, 'd');
 			p->is_dead = true;
 			break;
 		}	
+		// print_time(p);
 	}
 	return (NULL);
 }
 
-void	create_philos(t_pgm *pg)
-{
-	pg->i = -1;
-	while (++pg->i < pg->nb_fork)
-	{
-		pg->philos[pg->i].nb_time_eaten = 0;
-		pg->philos[pg->i].is_dead = false;
-		pg->philos[pg->i].is_full = false;
-		pg->philos[pg->i].id = pg->i + 1;
-		pg->philos[pg->i].pgm = pg;
-		pg->philos[pg->i].fork_left = &pg->forks[pg->i];
-		pg->philos[pg->i].fork_right = &pg->forks[pg->i + 1 % pg->nb_philos];
-		pthread_mutex_init(&pg->forks[pg->i], NULL);
-	}	
-}
+// void	create_philos(t_pgm *pg)
+// {
+// 	pg->i = -1;
+// 	while (++pg->i < pg->nb_fork)
+// 	{
+// 		pg->philos[pg->i].nb_time_eaten = 0;
+// 		pg->philos[pg->i].is_dead = false;
+// 		pg->philos[pg->i].is_full = false;
+// 		pg->philos[pg->i].id = pg->i + 1;
+// 		pg->philos[pg->i].pgm = pg;
+// 		pg->philos[pg->i].fork_left = &pg->forks[pg->i];
+// 		pg->philos[pg->i].fork_right = &pg->forks[pg->i + 1 % pg->nb_philos];
+// 		pthread_mutex_init(&pg->forks[pg->i], NULL);
+// 	}	
+// }
 
-int	create_philos_n_mutex(t_pgm *pg)
-{
-	create_philos(pg);
-	pg->i = -1;
-	while (++pg->i < pg->nb_philos)
-	{
-		if (pthread_create(&pg->th[pg->i], NULL,
-				&rountine, &pg->philos[pg->i]) != 0)
-		{
-			printf("Failed to create thread\n");
-			return (1);
-		}
-		printf("Philo %d is now existing\n", (pg->i) + 1);
-	}
-	pg->i = -1;
-	while (++pg->i < pg->nb_philos)
-	{
-		if (pthread_join(pg->th[pg->i], NULL) != 0)
-			return (2);
-		printf("Philo %d is DONE existing\n", (pg->i) + 1);
-	}	
-	return (0);
-}
+// int	create_philos_n_mutex(t_pgm *pg)
+// {
+// 	create_philos(pg);
+// 	pg->i = -1;
+// 	while (++pg->i < pg->nb_philos)
+// 	{
+// 		if (pthread_create(&pg->th[pg->i], NULL,
+// 				&rountine, &pg->philos[pg->i]) != 0)
+// 		{
+// 			printf("Failed to create thread\n");
+// 			return (1);
+// 		}
+// 		printf("Philo %d is now existing\n", (pg->i) + 1);
+// 	}
+// 	pg->i = -1;
+// 	while (++pg->i < pg->nb_philos)
+// 	{
+// 		if (pthread_join(pg->th[pg->i], NULL) != 0)
+// 			return (2);
+// 		printf("Philo %d is DONE existing\n", (pg->i) + 1);
+// 	}	
+// 	return (0);
+// }
 
 int	main(int argc, char **argv)
 {
