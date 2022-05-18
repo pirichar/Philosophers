@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 11:41:22 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/18 14:31:55 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,45 +35,20 @@
 //***LE USER ME DONNE EN MILISECONDE LES TEMPS**
 //***CHACUN DES CHIFFRES DOIT ETRE MULTIPLIER PAR 1000***
 
-void	print_status(t_philo *p, char status)
+void	take_forks_and_eat(t_philo *p)
 {
-	if (status == 't')
-				p->pgm->time.start_thinking = get_time();
-	else
-		p->pgm->time.time_atm = get_time();
-	if (status == 'l')
-		printf(HGRN"%ld %d has taken a fork \n"RESET,
-			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id);
-	if (status == 'r')
-		printf(HGRN"%ld %d has taken a fork\n"RESET,
-			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id);
-	if (status == 'e')
-	{
-		p->nb_time_eaten++;
-		printf(HBLU"%ld %d is eating and has eat %d times\n"RESET,
-			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id, p->nb_time_eaten);
-	}
-	if (status == 's')
-		printf(HMAG"%ld %d is sleeping\n"RESET,
-			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id);
-	if (status == 't')
-		printf(HCYN"%ld %d is thiking\n"RESET,
-			(p->pgm->time.start_thinking - p->pgm->time.initial_time), p->id);
-	if (status == 'd')
-		printf(HRED"%ld %d is dead\n"RESET,
-			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id);
+	pthread_mutex_lock(p->fork_left);
+	print_status(p, 'l');
+	pthread_mutex_lock(p->fork_right);
+	print_status(p, 'r');
+	//Eating
+	print_status(p, 'e');
+	p->pgm->start_time = get_time();
+	ft_sleep(p->pgm->time_to_eat);
+	pthread_mutex_unlock(p->fork_left);
+	pthread_mutex_unlock(p->fork_right);
+
 }
-
-
-void	print_time(t_philo *p)
-{
-	printf("This is the start time %ld\n",(p->pgm->start_time - p->pgm->time.initial_time));
-	printf("This is time to die %ld\n",(p->pgm->time_to_die));
-	printf("This is the actual time %ld\n",(p->pgm->actual_time - p->pgm->time.initial_time));
-	printf("This is the start time + time_to_die = %ld\nthis is actual time = %ld\n",
-	((p->pgm->start_time - p->pgm->time.initial_time) + p->pgm->time_to_die),(p->pgm->actual_time - p->pgm->time.initial_time));
-}
-
 void	*rountine(void *ptr)
 {
 	t_philo	*p;
@@ -82,35 +57,25 @@ void	*rountine(void *ptr)
 	p->pgm->start_time = get_time();
 	while (1)
 	{
+		p->pgm->actual_time = get_time();	
 		if (p->pgm->max_eat == true)
 			if (p->nb_time_eaten >= p->pgm->nb_time_to_eat) 
-				break;	
+				break;
 		//forks
-		pthread_mutex_lock(p->fork_left);
-		print_status(p, 'l');
-		pthread_mutex_lock(p->fork_right);
-		print_status(p, 'r');
-		//Eating
-		print_status(p, 'e');
-		p->pgm->start_time = get_time();
-		ft_sleep(p->pgm->time_to_eat);
-		//Unlocking forks
-		pthread_mutex_unlock(p->fork_left);
-		pthread_mutex_unlock(p->fork_right);
+		take_forks_and_eat(p);
 		//sleep
 		print_status(p, 's');
 		ft_sleep(p->pgm->time_to_sleep);
 		//Think
 		print_status(p, 't');
-		p->pgm->actual_time = get_time();
 		print_time(p);
+		p->pgm->actual_time = get_time();		
 		if ( p->pgm->actual_time >= p->pgm->start_time + p->pgm->time_to_die )
 		{
 			print_status(p, 'd');
 			p->is_dead = true;
 			break;
 		}	
-
 	}
 	return (NULL);
 }
@@ -122,6 +87,7 @@ void	create_philos(t_pgm *pg)
 	{
 		pg->philos[pg->i].nb_time_eaten = 0;
 		pg->philos[pg->i].is_dead = false;
+		pg->philos[pg->i].is_full = false;
 		pg->philos[pg->i].id = pg->i + 1;
 		pg->philos[pg->i].pgm = pg;
 		pg->philos[pg->i].fork_left = &pg->forks[pg->i];

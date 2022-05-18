@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 11:37:22 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/18 14:23:46 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_pgm
 typedef struct s_philo
 {
 	int				nb_time_eaten;
+	bool			is_full;
 	bool			is_dead;
 	int				id;
 	t_pgm			*pgm;
@@ -70,5 +71,7 @@ int		parse_and_initiate(int argc, char **argv, t_pgm *pg);
 //time.c
 long	get_time(void);
 void	ft_sleep(long time_to_sleep);
+void	print_time(t_philo *p);
+void	print_status(t_philo *p, char status);
 
 #endif
