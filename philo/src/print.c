@@ -29,43 +29,37 @@ void	print_initiation(t_pgm *pg)
 //je pourrais ausi faire une fonction qui retourne le time stamp actuel au lieu de faire get time ici
 void	print_status(t_philo *p, char status)
 {
-	pthread_mutex_lock(&p->pgm->write_mutex);
-	if (status == 't')
-				p->pgm->time.start_thinking = get_time();
-	else
-		p->pgm->time.time_atm = get_time();
-	if (status == 'l')
-		printf(HGRN"%ld %d has taken a fork \n"RESET,
-			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id);
-	if (status == 'r')
-		printf(HGRN"%ld %d has taken a fork\n"RESET,
-			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id);
-	if (status == 'e')
-	{
-		p->nb_time_eaten++;
-		printf(HBLU"%ld %d is eating and has eaten %d times\n"RESET,
-			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id, p->nb_time_eaten);
-	}
-	if (status == 's')
-		printf(HMAG"%ld %d is sleeping\n"RESET,
-			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id);
-	if (status == 't')
-		printf(HCYN"%ld %d is thiking\n"RESET,
-			(p->pgm->time.start_thinking - p->pgm->time.initial_time), p->id);
-	if (status == 'd')
-		printf(HRED"%ld %d is dead\n"RESET,
-			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id);
-	pthread_mutex_unlock(&p->pgm->write_mutex);
+		pthread_mutex_lock(&p->pgm->write_mutex);
+		p->pgm->time.time_atm = get_time() - p->pgm->time.initial_time;
+		if (status == 'l')
+			printf(HGRN"%ld %d has taken a fork \n"RESET,
+				(p->pgm->time.time_atm), p->id);
+		if (status == 'r')
+			printf(HGRN"%ld %d has taken a fork\n"RESET,
+				(p->pgm->time.time_atm), p->id);
+		if (status == 'e')
+			printf(HBLU"%ld %d is eating and has eaten %d times\n"RESET,
+				(p->pgm->time.time_atm), p->id, p->nb_time_eaten);
+		if (status == 's')
+			printf(HMAG"%ld %d is sleeping\n"RESET,
+				(p->pgm->time.time_atm), p->id);
+		if (status == 't')
+			printf(HCYN"%ld %d is thiking\n"RESET,
+				(p->pgm->time.time_atm), p->id);
+		if (status == 'd')
+			printf(HRED"%ld %d is dead\n"RESET,
+				(p->pgm->time.time_atm), p->id);
+		pthread_mutex_unlock(&p->pgm->write_mutex);
 }
 
 
 
 void	print_time(t_philo *p)
 {
-	printf("This is last time eaten %ld for %d\n",(p->pgm->last_eaten - p->pgm->time.initial_time), p->id);
+	printf("This is last time eaten %ld for %d\n",(p->last_eaten), p->id);
 	printf("This is time to die %ld for %d\n",(p->pgm->time_to_die), p->id);
-	printf("This is the actual time %ld for %d\n",(p->pgm->actual_time - p->pgm->time.initial_time), p->id);
+	printf("This is the actual time %ld for %d\n",(p->pgm->actual_time), p->id);
 	printf("This is the start time + time_to_die for %d = %ld\nthis is actual time = %ld for %d\n", p->id,
-	((p->pgm->last_eaten - p->pgm->time.initial_time) + p->pgm->time_to_die),
-		(p->pgm->actual_time - p->pgm->time.initial_time), p->id);
+	((p->last_eaten) + p->pgm->time_to_die),
+		(p->pgm->actual_time), p->id);
 }

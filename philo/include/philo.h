@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 20:25:21 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/19 12:39:50 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct s_pgm
 	bool			max_eat;
 	long			time_to_sleep;
 	long			time_to_die;
-	long			last_eaten;
 	long			actual_time;
 	int				nb_time_to_eat;
 	bool			game_over;
@@ -57,6 +56,7 @@ typedef struct s_philo
 	int				nb_time_eaten;
 	bool			is_full;
 	bool			is_dead;
+	long			last_eaten;
 	int				id;
 	t_pgm			*pgm;
 	pthread_mutex_t	*fork_left;
@@ -65,7 +65,7 @@ typedef struct s_philo
 
 
 //main.c
-void	*rountine(void *ptr);
+
 
 //print.c
 void	print_time(t_philo *p);
@@ -87,6 +87,9 @@ void	ft_sleep(long time_to_sleep);
 void	create_philos(t_pgm *pg);
 int		create_philos_n_mutex(t_pgm *pg);
 void	init_pgm(t_pgm *pg, char **argv);
+
+//routine.c
+void	*rountine(void *ptr);
 
 
 #endif

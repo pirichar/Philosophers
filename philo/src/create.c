@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:02:18 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 20:44:15 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/19 10:46:05 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	create_philos(t_pgm *pg)
 int	create_philos_n_mutex(t_pgm *pg)
 {
 	create_philos(pg);
-	pg->i = -1;
-	while (++pg->i < pg->nb_philos)
+	pg->i = 0;
+	while (pg->i < pg->nb_philos)
 	{
 		if (pthread_create(&pg->th[pg->i], NULL,
 				&rountine, &pg->philos[pg->i]) != 0)
@@ -54,13 +54,7 @@ int	create_philos_n_mutex(t_pgm *pg)
 			printf("Failed to create thread\n");
 			return (1);
 		}
+		pg->i++;
 	}
-	pg->i = -1;
-	while (++pg->i < pg->nb_philos)
-	{
-		if (pthread_join(pg->th[pg->i], NULL) != 0)
-			return (2);
-		printf("Philo %d is DONE existing\n", (pg->i) + 1);
-	}	
 	return (0);
 }
