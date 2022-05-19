@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/19 13:18:10 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/19 13:25:16 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,12 @@ void	*rountine(void *ptr)
 		//Think
 		print_status(p, 't');
 		//check for death
-		p->pgm->actual_time = get_time() - p->pgm->time.initial_time;
-		if (p->pgm->actual_time >= (p->last_eaten + p->pgm->time_to_die))
-		{
-			p->is_dead = true;
-			p->pgm->game_over = true;
-		}
+		// p->pgm->actual_time = get_time() - p->pgm->time.initial_time;
+		// if (p->pgm->actual_time >= (p->last_eaten + p->pgm->time_to_die))
+		// {
+		// 	p->is_dead = true;
+		// 	p->pgm->game_over = true;
+		// }
 	}
 	return (NULL);
 }

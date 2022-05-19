@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/19 13:11:36 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/19 13:23:16 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,12 @@ int		check_for_death(t_pgm *pg)
 	int i = 0;
 	while(i < pg->nb_philos)
 	{
-		if (pg->philos[i].is_dead == true)
+		pg->actual_time = get_time() - pg->time.initial_time;
+		if (pg->actual_time >= (pg->philos[i].last_eaten + pg->time_to_die))
 		{
 			print_status(&pg->philos[i], 'd');
+			pg->philos[i].is_dead = true;
+			pg->game_over = true;
 			return (1);
 		}
 		if (i == pg->nb_philos - 1)
@@ -54,6 +57,22 @@ int		check_for_death(t_pgm *pg)
 	}
 	return (0);
 }
+// int		check_for_death(t_pgm *pg)
+// {
+// 	int i = 0;
+// 	while(i < pg->nb_philos)
+// 	{
+// 		if (pg->philos[i].is_dead == true)
+// 		{
+// 			print_status(&pg->philos[i], 'd');
+// 			return (1);
+// 		}
+// 		if (i == pg->nb_philos - 1)
+// 			i = -1;
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
 
 int	main(int argc, char **argv)

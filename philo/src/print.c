@@ -32,22 +32,22 @@ void	print_status(t_philo *p, char status)
 		pthread_mutex_lock(&p->pgm->write_mutex);
 		p->pgm->time.time_atm = get_time() - p->pgm->time.initial_time;
 		if (status == 'l')
-			printf(HGRN"%ld %d has taken a fork \n"RESET,
+			printf(HGRN"%ld %d has taken a fork🍴\n"RESET,
 				(p->pgm->time.time_atm), p->id);
 		if (status == 'r')
-			printf(HGRN"%ld %d has taken a fork\n"RESET,
+			printf(HGRN"%ld %d has taken a fork🍴\n"RESET,
 				(p->pgm->time.time_atm), p->id);
 		if (status == 'e')
-			printf(HBLU"%ld %d is eating and has eaten %d times\n"RESET,
+			printf(HBLU"%ld %d is eating 🍆 and has eaten %d times\n"RESET,
 				(p->pgm->time.time_atm), p->id, p->nb_time_eaten);
 		if (status == 's')
 			printf(HMAG"%ld %d is sleeping\n"RESET,
 				(p->pgm->time.time_atm), p->id);
 		if (status == 't')
-			printf(HCYN"%ld %d is thiking\n"RESET,
+			printf(HCYN"%ld %d is thinking💡\n"RESET,
 				(p->pgm->time.time_atm), p->id);
 		if (status == 'd')
-			printf(HRED"%ld %d is dead\n"RESET,
+			printf(HRED"%ld %d is dead ☠️\n"RESET,
 				(p->pgm->time.time_atm), p->id);
 		pthread_mutex_unlock(&p->pgm->write_mutex);
 }
