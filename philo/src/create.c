@@ -6,11 +6,25 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:02:18 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 15:29:04 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/18 20:44:15 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+void	init_pgm(t_pgm *pg, char **argv)
+{
+	pg->nb_philos = ft_atoi(argv[1]);
+	pg->nb_fork = pg->nb_philos;
+	pg->time_to_die = ft_atoi(argv[2]);
+	pg->time_to_eat = ft_atoi(argv[3]);
+	pg->time_to_sleep = ft_atoi(argv[4]);
+	pg->th = malloc(sizeof(pthread_t) * (pg->nb_philos));
+	pg->philos = malloc(sizeof(t_philo) * (pg->nb_philos));
+	pg->forks = malloc(sizeof(pthread_mutex_t) * pg->nb_fork);
+	pthread_mutex_init(&pg->write_mutex, NULL);
+	print_initiation(pg);
+}
 
 void	create_philos(t_pgm *pg)
 {
@@ -23,7 +37,7 @@ void	create_philos(t_pgm *pg)
 		pg->philos[pg->i].id = pg->i + 1;
 		pg->philos[pg->i].pgm = pg;
 		pg->philos[pg->i].fork_left = &pg->forks[pg->i];
-		pg->philos[pg->i].fork_right = &pg->forks[pg->i + 1 % pg->nb_philos];
+		pg->philos[pg->i].fork_right = &pg->forks[(pg->i + 1) % pg->nb_fork];
 		pthread_mutex_init(&pg->forks[pg->i], NULL);
 	}	
 }

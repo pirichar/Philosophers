@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 11:27:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 15:10:35 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/18 20:16:55 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,14 +109,6 @@ int	parse_and_initiate(int argc, char **argv, t_pgm *pg)
 		pg->max_eat = true;
 		pg->nb_time_to_eat = ft_atoi(argv[5]);
 	}
-	pg->nb_philos = ft_atoi(argv[1]);
-	pg->nb_fork = pg->nb_philos;
-	pg->time_to_die = ft_atoi(argv[2]);
-	pg->time_to_eat = ft_atoi(argv[3]);
-	pg->time_to_sleep = ft_atoi(argv[4]);
-	pg->th = malloc(sizeof(pthread_t) * (pg->nb_philos));
-	pg->philos = malloc(sizeof(t_philo) * (pg->nb_philos));
-	pg->forks = malloc(sizeof(pthread_mutex_t) * pg->nb_fork);
-	print_initiation(pg);
+	init_pgm(pg, argv);
 	return (0);
 }

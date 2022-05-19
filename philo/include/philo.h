@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 15:10:56 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/18 20:25:21 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ typedef struct s_pgm
 	int				nb_fork;
 	pthread_t		*th;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	write_mutex;
 	int				i;
 	t_philo			*philos;
 	long			time_to_eat;
 	bool			max_eat;
 	long			time_to_sleep;
 	long			time_to_die;
-	long			start_time;
+	long			last_eaten;
 	long			actual_time;
 	int				nb_time_to_eat;
 	bool			game_over;
@@ -77,13 +78,15 @@ int		check_int(char *str);
 int		validate_input(int argc, char **argv);
 int		parse_and_initiate(int argc, char **argv, t_pgm *pg);
 
+
 //time.c
 long	get_time(void);
 void	ft_sleep(long time_to_sleep);
 
 //create.c
 void	create_philos(t_pgm *pg);
-int	create_philos_n_mutex(t_pgm *pg);
+int		create_philos_n_mutex(t_pgm *pg);
+void	init_pgm(t_pgm *pg, char **argv);
 
 
 #endif

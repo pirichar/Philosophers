@@ -29,6 +29,7 @@ void	print_initiation(t_pgm *pg)
 //je pourrais ausi faire une fonction qui retourne le time stamp actuel au lieu de faire get time ici
 void	print_status(t_philo *p, char status)
 {
+	pthread_mutex_lock(&p->pgm->write_mutex);
 	if (status == 't')
 				p->pgm->time.start_thinking = get_time();
 	else
@@ -54,15 +55,17 @@ void	print_status(t_philo *p, char status)
 	if (status == 'd')
 		printf(HRED"%ld %d is dead\n"RESET,
 			(p->pgm->time.time_atm - p->pgm->time.initial_time), p->id);
+	pthread_mutex_unlock(&p->pgm->write_mutex);
 }
+
 
 
 void	print_time(t_philo *p)
 {
-	printf("This is the start time %ld for %d\n",(p->pgm->start_time - p->pgm->time.initial_time), p->id);
+	printf("This is last time eaten %ld for %d\n",(p->pgm->last_eaten - p->pgm->time.initial_time), p->id);
 	printf("This is time to die %ld for %d\n",(p->pgm->time_to_die), p->id);
 	printf("This is the actual time %ld for %d\n",(p->pgm->actual_time - p->pgm->time.initial_time), p->id);
 	printf("This is the start time + time_to_die for %d = %ld\nthis is actual time = %ld for %d\n", p->id,
-	((p->pgm->start_time - p->pgm->time.initial_time) + p->pgm->time_to_die),
+	((p->pgm->last_eaten - p->pgm->time.initial_time) + p->pgm->time_to_die),
 		(p->pgm->actual_time - p->pgm->time.initial_time), p->id);
 }
