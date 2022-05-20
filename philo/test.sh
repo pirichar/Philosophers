@@ -8,5 +8,5 @@
 # argv[4] = time_to_sleep (en milisecondes )
 # argv[5] = number_of_times_each_philosopher_must_eat (optionnel 
 gcc -Wall -Werror -Wextra -g ./src/*.c
-./a.out 4 400 200 200
+./a.out 2 500 200 200 5
 # 0		1	2	3	4 5

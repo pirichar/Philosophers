@@ -40,10 +40,10 @@ void	print_status(t_philo *p, char status)
 			printf(HGRN"%ld %d has taken a fork🍴\n"RESET,
 				(p->pgm->time.time_atm), p->id);
 		if (status == 'e')
-			printf(HBLU"%ld %d is eating 🍆 and has eaten %d times\n"RESET,
+			printf(HBLU"%ld %d is eating 🍆 and has eaten %d times ⏰\n"RESET,
 				(p->pgm->time.time_atm), p->id, p->nb_time_eaten);
 		if (status == 's')
-			printf(HMAG"%ld %d is sleeping\n"RESET,
+			printf(HMAG"%ld %d is sleeping😴\n"RESET,
 				(p->pgm->time.time_atm), p->id);
 		if (status == 't')
 			printf(HCYN"%ld %d is thinking💡\n"RESET,
