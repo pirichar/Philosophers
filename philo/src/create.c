@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:02:18 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/19 10:46:05 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/20 12:14:55 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	init_pgm(t_pgm *pg, char **argv)
 {
 	pg->nb_philos = ft_atoi(argv[1]);
 	pg->nb_fork = pg->nb_philos;
+	pg->game_over = false;
 	pg->time_to_die = ft_atoi(argv[2]);
 	pg->time_to_eat = ft_atoi(argv[3]);
 	pg->time_to_sleep = ft_atoi(argv[4]);
@@ -37,14 +38,14 @@ void	create_philos(t_pgm *pg)
 		pg->philos[pg->i].id = pg->i + 1;
 		pg->philos[pg->i].pgm = pg;
 		pg->philos[pg->i].fork_left = &pg->forks[pg->i];
-		pg->philos[pg->i].fork_right = &pg->forks[(pg->i + 1) % pg->nb_fork];
+		if (pg->nb_philos > 1)
+			pg->philos[pg->i].fork_right = &pg->forks[(pg->i + 1) % pg->nb_fork];
 		pthread_mutex_init(&pg->forks[pg->i], NULL);
 	}	
 }
 
-int	create_philos_n_mutex(t_pgm *pg)
+int	run_all_threads(t_pgm *pg)
 {
-	create_philos(pg);
 	pg->i = 0;
 	while (pg->i < pg->nb_philos)
 	{

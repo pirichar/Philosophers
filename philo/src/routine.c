@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/19 13:25:16 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/20 11:06:57 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ static void	take_forks_and_eat(t_philo *p)
 		print_status(p, 'l');
 		//Eating
 		p->nb_time_eaten++;
-		print_status(p, 'e');
 		p->last_eaten = get_time() - p->pgm->time.initial_time;
+		print_status(p, 'e');
 		ft_sleep(p->pgm->time_to_eat);
 		pthread_mutex_unlock(p->fork_right);
 		pthread_mutex_unlock(p->fork_left);
@@ -44,6 +44,13 @@ static void	take_forks_and_eat(t_philo *p)
 	}
 }
 
+void	sleep_routine(t_philo *p)
+{
+	print_status(p, 's');
+	ft_sleep(p->pgm->time_to_sleep);
+}
+
+
 void	*rountine(void *ptr)
 {
 	t_philo	*p;
@@ -52,9 +59,6 @@ void	*rountine(void *ptr)
 	p->last_eaten = (get_time() - p->pgm->time.initial_time);
 	while (1)
 	{
-		if (p->pgm->game_over == true)
-			break;
-		p->pgm->actual_time = get_time() - p->pgm->time.initial_time;
 		if (p->pgm->max_eat == true)
 			if (p->nb_time_eaten >= p->pgm->nb_time_to_eat) 
 			{
@@ -62,20 +66,9 @@ void	*rountine(void *ptr)
 								//pour tout mes philos
 				break;
 			}
-		//forks
 		take_forks_and_eat(p);
-		//sleep
-		print_status(p, 's');
-		ft_sleep(p->pgm->time_to_sleep);
-		//Think
+		sleep_routine(p);
 		print_status(p, 't');
-		//check for death
-		// p->pgm->actual_time = get_time() - p->pgm->time.initial_time;
-		// if (p->pgm->actual_time >= (p->last_eaten + p->pgm->time_to_die))
-		// {
-		// 	p->is_dead = true;
-		// 	p->pgm->game_over = true;
-		// }
 	}
 	return (NULL);
 }

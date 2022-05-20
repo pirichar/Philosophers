@@ -29,6 +29,8 @@ void	print_initiation(t_pgm *pg)
 //je pourrais ausi faire une fonction qui retourne le time stamp actuel au lieu de faire get time ici
 void	print_status(t_philo *p, char status)
 {
+	if (p->pgm->game_over == false)
+	{
 		pthread_mutex_lock(&p->pgm->write_mutex);
 		p->pgm->time.time_atm = get_time() - p->pgm->time.initial_time;
 		if (status == 'l')
@@ -47,9 +49,10 @@ void	print_status(t_philo *p, char status)
 			printf(HCYN"%ld %d is thinking💡\n"RESET,
 				(p->pgm->time.time_atm), p->id);
 		if (status == 'd')
-			printf(HRED"%ld %d is dead ☠️\n"RESET,
+			printf(HRED"%ld %d is dead 💀\n"RESET,
 				(p->pgm->time.time_atm), p->id);
 		pthread_mutex_unlock(&p->pgm->write_mutex);
+	}
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 11:27:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 20:16:55 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/20 11:59:51 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	validate_input(int argc, char **argv)
 	return (0);
 }
 
-int	parse_and_initiate(int argc, char **argv, t_pgm *pg)
+int	parse_input(int argc, char **argv, t_pgm *pg)
 {
 	if (validate_input(argc, argv) != 0)
 		return (1);
@@ -109,6 +109,5 @@ int	parse_and_initiate(int argc, char **argv, t_pgm *pg)
 		pg->max_eat = true;
 		pg->nb_time_to_eat = ft_atoi(argv[5]);
 	}
-	init_pgm(pg, argv);
 	return (0);
 }

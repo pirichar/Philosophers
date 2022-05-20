@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/19 12:39:50 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/20 12:18:38 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	print_initiation(t_pgm *pg);
 int		ft_atoi(char *str);
 int		check_int(char *str);
 int		validate_input(int argc, char **argv);
-int		parse_and_initiate(int argc, char **argv, t_pgm *pg);
+int		parse_input(int argc, char **argv, t_pgm *pg);
 
 
 //time.c
@@ -85,7 +85,7 @@ void	ft_sleep(long time_to_sleep);
 
 //create.c
 void	create_philos(t_pgm *pg);
-int		create_philos_n_mutex(t_pgm *pg);
+int		run_all_threads(t_pgm *pg);
 void	init_pgm(t_pgm *pg, char **argv);
 
 //routine.c
