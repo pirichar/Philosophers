@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/23 08:44:01 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 14:24:02 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,34 +16,34 @@ static void	take_forks_and_eat(t_philo *p)
 {
 	if (p->id % 2 == 0)
 	{
-		pthread_mutex_lock(p->fork_right);
-		print_status(p, 'r');
 		pthread_mutex_lock(p->fork_left);
 		print_status(p, 'l');
+		pthread_mutex_lock(p->fork_right);
+		print_status(p, 'r');
 		p->nb_time_eaten++;
 		pthread_mutex_lock(&p->pgm->time_mutex);
 		p->last_eaten = get_time() - p->pgm->time.initial_time;
 		print_status(p, 'e');
 		pthread_mutex_unlock(&p->pgm->time_mutex);
 		ft_sleep(p->pgm->time_to_eat);
-		pthread_mutex_unlock(p->fork_right);
 		pthread_mutex_unlock(p->fork_left);
+		pthread_mutex_unlock(p->fork_right);
 	}
 	else
 	{
 		usleep(50);
-		pthread_mutex_lock(p->fork_right);
-		print_status(p, 'l');
 		pthread_mutex_lock(p->fork_left);
 		print_status(p, 'r');
+		pthread_mutex_lock(p->fork_right);
+		print_status(p, 'l');
 		p->nb_time_eaten++;
 		pthread_mutex_lock(&p->pgm->time_mutex);
 		p->last_eaten = get_time() - p->pgm->time.initial_time;
 		print_status(p, 'e');
 		pthread_mutex_unlock(&p->pgm->time_mutex);
 		ft_sleep(p->pgm->time_to_eat);
-		pthread_mutex_unlock(p->fork_right);
 		pthread_mutex_unlock(p->fork_left);
+		pthread_mutex_unlock(p->fork_right);
 	}
 }
 
@@ -61,7 +61,6 @@ static void	check_full(t_philo *p)
 		{
 			p->is_full = 1;
 			p->pgm->nb_full_philo++;
-			printf("THIS IS THE NUMBER OF FULL PHILOS %D\n", p->pgm->nb_full_philo);
 		}
 	pthread_mutex_unlock(&p->pgm->full_mutex);
 }
