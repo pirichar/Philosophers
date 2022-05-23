@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/23 16:37:57 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 18:35:03 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@ static void	take_forks_and_eat(t_philo *p)
 		print_status(p, 'l');
 		pthread_mutex_lock(p->fork_right);
 		print_status(p, 'r');
+		//rotate queue
 		p->nb_time_eaten++;
 		pthread_mutex_lock(&p->pgm->time_mutex);
 		p->last_eaten = get_time() - p->pgm->time.initial_time;
-		print_status(p, 'e');
 		pthread_mutex_unlock(&p->pgm->time_mutex);
+		print_status(p, 'e');
 		ft_sleep(p->pgm->time_to_eat);
 		pthread_mutex_unlock(p->fork_left);
 		pthread_mutex_unlock(p->fork_right);
@@ -39,8 +40,8 @@ static void	take_forks_and_eat(t_philo *p)
 		p->nb_time_eaten++;
 		pthread_mutex_lock(&p->pgm->time_mutex);
 		p->last_eaten = get_time() - p->pgm->time.initial_time;
-		print_status(p, 'e');
 		pthread_mutex_unlock(&p->pgm->time_mutex);
+		print_status(p, 'e');
 		ft_sleep(p->pgm->time_to_eat);
 		pthread_mutex_unlock(p->fork_left);
 		pthread_mutex_unlock(p->fork_right);
@@ -53,8 +54,10 @@ static void	sleep_routine(t_philo *p)
 	ft_sleep(p->pgm->time_to_sleep);
 }
 
-static void	check_full(t_philo *p)
+static bool	check_full(t_philo *p)
 {
+	bool gameover;
+
 	pthread_mutex_lock(&p->pgm->full_mutex);
 	if (p->pgm->max_eat == true)
 		if (p->nb_time_eaten >= p->pgm->nb_time_to_eat) 
@@ -63,9 +66,13 @@ static void	check_full(t_philo *p)
 			p->pgm->nb_full_philo++;
 		}
 	pthread_mutex_unlock(&p->pgm->full_mutex);
+	pthread_mutex_lock(&p->pgm->death_mutex);
+	gameover = p->pgm->game_over;
+	pthread_mutex_unlock(&p->pgm->death_mutex);
+	return (gameover);
 }
 
-void	*rountine(void *ptr)
+void	*routine(void *ptr)
 {
 	t_philo	*p;
 
@@ -73,10 +80,15 @@ void	*rountine(void *ptr)
 	p->last_eaten = (get_time() - p->pgm->time.initial_time);
 	while (1)
 	{
-		check_full(p);
+		//faire un if ici avec si mon élément est le premier de ma queue
+		if (check_full(p))
+			break;
 		take_forks_and_eat(p);
-		check_full(p);
+		if (check_full(p))
+			break;
 		sleep_routine(p);
+		if (check_full(p))
+			break;
 		print_status(p, 't');
 	}
 	return (NULL);

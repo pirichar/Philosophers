@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:02:18 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/23 08:37:22 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 17:42:43 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	run_all_threads(t_pgm *pg)
 	while (pg->i < pg->nb_philos)
 	{
 		if (pthread_create(&pg->th[pg->i], NULL,
-				&rountine, &pg->philos[pg->i]) != 0)
+				&routine, &pg->philos[pg->i]) != 0)
 		{
 			printf("Failed to create thread\n");
 			return (1);

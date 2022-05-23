@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/23 16:05:23 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 18:36:09 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,22 +54,25 @@ int	check_for_end(t_pgm *pg)
 		pthread_mutex_lock(&pg->death_mutex);
 		if (pg->actual_time >= (pg->philos[i].last_eaten + pg->time_to_die))
 		{
-			print_status(&pg->philos[i], 'd');
 			pg->game_over = true;
+			pthread_mutex_unlock(&pg->death_mutex);	
+			print_status(&pg->philos[i], 'd');
 			return (1);
 		}
-		pthread_mutex_unlock(&pg->death_mutex);
+		pthread_mutex_unlock(&pg->death_mutex);	
 		pthread_mutex_lock(&pg->full_mutex);
-		if (pg->nb_full_philo == pg->nb_philos)
+		if (pg->nb_full_philo >= pg->nb_philos)
 		{
 			pg->game_over = true;
 			printf("Everyone is now full🍝\n");
+			pthread_mutex_unlock(&pg->full_mutex);
 			return (1);
 		}
 		pthread_mutex_unlock(&pg->full_mutex);
 		if (i == pg->nb_philos - 1)
 			i = -1;
 		i++;
+		// usleep(500);
 	}
 	return (0);
 }
@@ -94,7 +97,7 @@ int	main(int argc, char **argv)
 
 	i = 0;
 	if (argc == 5 || argc == 6)
-	{	
+	{
 		if (parse_input(argc, argv, &pg) != 0)
 			return (1);
 		init_pgm(&pg, argv);
@@ -106,6 +109,7 @@ int	main(int argc, char **argv)
 				return (2);
 			if (check_for_end(&pg) == 1)
 			{
+				join_thread(&pg);
 				destroy_mutex(&pg);
 				return (3);
 			}

@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:09:50 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/23 16:18:05 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 17:57:07 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ void	print_initiation(t_pgm *pg)
 //le time stamp actuel au lieu de faire get time ici
 void	print_status(t_philo *p, char status)
 {
+	pthread_mutex_lock(&p->pgm->death_mutex);
 	pthread_mutex_lock(&p->pgm->write_mutex);
-	if (p->pgm->game_over == false)
+	if (p->pgm->game_over == false || status == 'd')
 	{
 		p->pgm->time.time_atm = get_time() - p->pgm->time.initial_time;
 		if (status == 'l')
@@ -54,6 +55,7 @@ void	print_status(t_philo *p, char status)
 			printf(HRED"%ld %d is dead 💀\n"RESET,
 				(p->pgm->time.time_atm), p->id);
 	}
+	pthread_mutex_unlock(&p->pgm->death_mutex);
 	pthread_mutex_unlock(&p->pgm->write_mutex);
 }
 

@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/23 08:20:30 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 17:42:21 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int		run_all_threads(t_pgm *pg);
 void	init_pgm(t_pgm *pg, char **argv);
 
 //routine.c
-void	*rountine(void *ptr);
+void	*routine(void *ptr);
 
 
 #endif
