@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 11:40:39 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 18:00:49 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 08:01:15 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,16 @@ long	get_time(void)
 	return (rtn);
 }
 
-
 void	ft_sleep(long time_to_sleep)
 {
-	long last_eaten;
-	long actual_time;
+	long	last_eaten;
+	long	actual_time;
 
 	last_eaten = get_time();
-	while(1)
+	while (1)
 	{
 		actual_time = get_time();
-		if(last_eaten + time_to_sleep == actual_time)
-			break;
+		if (last_eaten + time_to_sleep == actual_time)
+			break ;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/20 12:18:38 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 08:20:30 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,13 @@ typedef struct s_pgm
 {
 	int				nb_philos;
 	int				nb_fork;
+	int				nb_full_philo;
 	pthread_t		*th;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	write_mutex;
+	pthread_mutex_t	death_mutex;
+	pthread_mutex_t	time_mutex;
+	pthread_mutex_t	full_mutex;
 	int				i;
 	t_philo			*philos;
 	long			time_to_eat;

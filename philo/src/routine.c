@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/20 15:37:34 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 08:44:01 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,36 +20,51 @@ static void	take_forks_and_eat(t_philo *p)
 		print_status(p, 'r');
 		pthread_mutex_lock(p->fork_left);
 		print_status(p, 'l');
-		//Eating
 		p->nb_time_eaten++;
+		pthread_mutex_lock(&p->pgm->time_mutex);
 		p->last_eaten = get_time() - p->pgm->time.initial_time;
 		print_status(p, 'e');
+		pthread_mutex_unlock(&p->pgm->time_mutex);
 		ft_sleep(p->pgm->time_to_eat);
 		pthread_mutex_unlock(p->fork_right);
 		pthread_mutex_unlock(p->fork_left);
 	}
 	else
 	{
-		pthread_mutex_lock(p->fork_left);
-		print_status(p, 'l');
+		usleep(50);
 		pthread_mutex_lock(p->fork_right);
+		print_status(p, 'l');
+		pthread_mutex_lock(p->fork_left);
 		print_status(p, 'r');
-		//Eating
 		p->nb_time_eaten++;
-		print_status(p, 'e');
+		pthread_mutex_lock(&p->pgm->time_mutex);
 		p->last_eaten = get_time() - p->pgm->time.initial_time;
+		print_status(p, 'e');
+		pthread_mutex_unlock(&p->pgm->time_mutex);
 		ft_sleep(p->pgm->time_to_eat);
-		pthread_mutex_unlock(p->fork_left);
 		pthread_mutex_unlock(p->fork_right);
+		pthread_mutex_unlock(p->fork_left);
 	}
 }
 
-void	sleep_routine(t_philo *p)
+static void	sleep_routine(t_philo *p)
 {
 	print_status(p, 's');
 	ft_sleep(p->pgm->time_to_sleep);
 }
 
+static void	check_full(t_philo *p)
+{
+	pthread_mutex_lock(&p->pgm->full_mutex);
+	if (p->pgm->max_eat == true)
+		if (p->nb_time_eaten >= p->pgm->nb_time_to_eat) 
+		{
+			p->is_full = 1;
+			p->pgm->nb_full_philo++;
+			printf("THIS IS THE NUMBER OF FULL PHILOS %D\n", p->pgm->nb_full_philo);
+		}
+	pthread_mutex_unlock(&p->pgm->full_mutex);
+}
 
 void	*rountine(void *ptr)
 {
@@ -59,14 +74,9 @@ void	*rountine(void *ptr)
 	p->last_eaten = (get_time() - p->pgm->time.initial_time);
 	while (1)
 	{
-		if (p->pgm->max_eat == true)
-			if (p->nb_time_eaten >= p->pgm->nb_time_to_eat) 
-			{
-				p->is_full = 1;//probablement que ici je devrais me faire un array avec mes is_full
-								//pour tout mes philos
-				break;
-			}
+		check_full(p);
 		take_forks_and_eat(p);
+		check_full(p);
 		sleep_routine(p);
 		print_status(p, 't');
 	}

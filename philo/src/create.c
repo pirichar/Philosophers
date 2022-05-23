@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:02:18 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/20 12:14:55 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 08:37:22 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	init_pgm(t_pgm *pg, char **argv)
 	pg->nb_philos = ft_atoi(argv[1]);
 	pg->nb_fork = pg->nb_philos;
 	pg->game_over = false;
+	pg->nb_full_philo = 0;
 	pg->time_to_die = ft_atoi(argv[2]);
 	pg->time_to_eat = ft_atoi(argv[3]);
 	pg->time_to_sleep = ft_atoi(argv[4]);
@@ -24,23 +25,28 @@ void	init_pgm(t_pgm *pg, char **argv)
 	pg->philos = malloc(sizeof(t_philo) * (pg->nb_philos));
 	pg->forks = malloc(sizeof(pthread_mutex_t) * pg->nb_fork);
 	pthread_mutex_init(&pg->write_mutex, NULL);
+	pthread_mutex_init(&pg->death_mutex, NULL);
+	pthread_mutex_init(&pg->time_mutex, NULL);
+	pthread_mutex_init(&pg->full_mutex, NULL);
+	pg->time.initial_time = get_time();
 	print_initiation(pg);
+	create_philos(pg);
 }
 
-void	create_philos(t_pgm *pg)
+void	create_philos(t_pgm *p)
 {
-	pg->i = -1;
-	while (++pg->i < pg->nb_fork)
+	p->i = -1;
+	while (++p->i < p->nb_fork)
 	{
-		pg->philos[pg->i].nb_time_eaten = 0;
-		pg->philos[pg->i].is_dead = false;
-		pg->philos[pg->i].is_full = false;
-		pg->philos[pg->i].id = pg->i + 1;
-		pg->philos[pg->i].pgm = pg;
-		pg->philos[pg->i].fork_left = &pg->forks[pg->i];
-		if (pg->nb_philos > 1)
-			pg->philos[pg->i].fork_right = &pg->forks[(pg->i + 1) % pg->nb_fork];
-		pthread_mutex_init(&pg->forks[pg->i], NULL);
+		p->philos[p->i].nb_time_eaten = 0;
+		p->philos[p->i].is_dead = false;
+		p->philos[p->i].is_full = false;
+		p->philos[p->i].id = p->i + 1;
+		p->philos[p->i].pgm = p;
+		p->philos[p->i].fork_left = &p->forks[p->i];
+		if (p->nb_philos > 1)
+			p->philos[p->i].fork_right = &p->forks[(p->i + 1) % p->nb_fork];
+		pthread_mutex_init(&p->forks[p->i], NULL);
 	}	
 }
 

@@ -1,4 +1,4 @@
-	/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:09:50 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/18 15:13:03 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 08:17:52 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,16 @@ void	print_initiation(t_pgm *pg)
 	printf("--------------------------\n");
 }
 
-//il faudrait que je mette un mutex sur ma fonction au lieu de call printf 14 fois je pourrais juste le caller avec la string que je passe
-// ca va juste me prendre un strcomp + passer ce que je veux imprimmer comme du monde
-//je pourrais ausi faire une fonction qui retourne le time stamp actuel au lieu de faire get time ici
+//il faudrait que je mette un mutex sur ma fonction au lieu de 
+//call printf 14 fois je pourrais juste le caller avec la string que je passe
+// ca va juste me prendre un strcomp + passer ce que je veux imprimmer 
+//comme du monde je pourrais ausi faire une fonction qui retourne 
+//le time stamp actuel au lieu de faire get time ici
 void	print_status(t_philo *p, char status)
 {
+	pthread_mutex_lock(&p->pgm->write_mutex);
 	if (p->pgm->game_over == false)
 	{
-		pthread_mutex_lock(&p->pgm->write_mutex);
 		p->pgm->time.time_atm = get_time() - p->pgm->time.initial_time;
 		if (status == 'l')
 			printf(HGRN"%ld %d has taken a fork🍴\n"RESET,
@@ -51,18 +53,17 @@ void	print_status(t_philo *p, char status)
 		if (status == 'd')
 			printf(HRED"%ld %d is dead 💀\n"RESET,
 				(p->pgm->time.time_atm), p->id);
-		pthread_mutex_unlock(&p->pgm->write_mutex);
 	}
+	pthread_mutex_unlock(&p->pgm->write_mutex);
 }
-
-
 
 void	print_time(t_philo *p)
 {
-	printf("This is last time eaten %ld for %d\n",(p->last_eaten), p->id);
-	printf("This is time to die %ld for %d\n",(p->pgm->time_to_die), p->id);
-	printf("This is the actual time %ld for %d\n",(p->pgm->actual_time), p->id);
-	printf("This is the start time + time_to_die for %d = %ld\nthis is actual time = %ld for %d\n", p->id,
-	((p->last_eaten) + p->pgm->time_to_die),
+	printf("This is last time eaten %ld for %d\n", (p->last_eaten), p->id);
+	printf("This is time to die %ld for %d\n", (p->pgm->time_to_die), p->id);
+	printf("This is the actual time %ld for %d\n", (p->pgm->actual_time), p->id);
+	printf("This is the start time + time_to_die for %d = %ld\nt", p->id,
+		((p->last_eaten) + p->pgm->time_to_die));
+	printf("this is actual time = %ld for %d\n",
 		(p->pgm->actual_time), p->id);
 }
