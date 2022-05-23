@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/23 14:24:02 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/23 16:37:57 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	take_forks_and_eat(t_philo *p)
 {
-	if (p->id % 2 == 0)
+	if (p->id % 2 != 0)
 	{
 		pthread_mutex_lock(p->fork_left);
 		print_status(p, 'l');
