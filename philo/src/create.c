@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:02:18 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/23 17:42:43 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/24 10:42:00 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	init_pgm(t_pgm *pg, char **argv)
 	pg->time_to_die = ft_atoi(argv[2]);
 	pg->time_to_eat = ft_atoi(argv[3]);
 	pg->time_to_sleep = ft_atoi(argv[4]);
+	pg->queue = create_queue(pg->nb_philos);
 	pg->th = malloc(sizeof(pthread_t) * (pg->nb_philos));
 	pg->philos = malloc(sizeof(t_philo) * (pg->nb_philos));
 	pg->forks = malloc(sizeof(pthread_mutex_t) * pg->nb_fork);

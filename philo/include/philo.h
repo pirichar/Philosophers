@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/23 17:42:21 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/24 10:41:21 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_pgm
 	long			time_to_die;
 	long			actual_time;
 	int				nb_time_to_eat;
+	int				*queue;
 	bool			game_over;
 	t_time			time;
 }				t_pgm;
@@ -95,5 +96,8 @@ void	init_pgm(t_pgm *pg, char **argv);
 //routine.c
 void	*routine(void *ptr);
 
+//queue.c
+int	*create_queue(int philo_count);
+void	rotate_queue(int *queue, int size);
 
 #endif

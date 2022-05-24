@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/23 18:35:03 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/24 10:53:55 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,57 @@
 
 static void	take_forks_and_eat(t_philo *p)
 {
-	if (p->id % 2 != 0)
-	{
-		pthread_mutex_lock(p->fork_left);
-		print_status(p, 'l');
-		pthread_mutex_lock(p->fork_right);
-		print_status(p, 'r');
-		//rotate queue
-		p->nb_time_eaten++;
-		pthread_mutex_lock(&p->pgm->time_mutex);
-		p->last_eaten = get_time() - p->pgm->time.initial_time;
-		pthread_mutex_unlock(&p->pgm->time_mutex);
-		print_status(p, 'e');
-		ft_sleep(p->pgm->time_to_eat);
-		pthread_mutex_unlock(p->fork_left);
-		pthread_mutex_unlock(p->fork_right);
-	}
-	else
-	{
-		usleep(50);
-		pthread_mutex_lock(p->fork_left);
-		print_status(p, 'r');
-		pthread_mutex_lock(p->fork_right);
-		print_status(p, 'l');
-		p->nb_time_eaten++;
-		pthread_mutex_lock(&p->pgm->time_mutex);
-		p->last_eaten = get_time() - p->pgm->time.initial_time;
-		pthread_mutex_unlock(&p->pgm->time_mutex);
-		print_status(p, 'e');
-		ft_sleep(p->pgm->time_to_eat);
-		pthread_mutex_unlock(p->fork_left);
-		pthread_mutex_unlock(p->fork_right);
-	}
+	pthread_mutex_lock(p->fork_left);
+	print_status(p, 'l');
+	pthread_mutex_lock(p->fork_right);
+	print_status(p, 'r');
+	//rotate queue
+	rotate_queue(p->pgm->queue, p->pgm->nb_philos);
+	p->nb_time_eaten++;
+	pthread_mutex_lock(&p->pgm->time_mutex);
+	p->last_eaten = get_time() - p->pgm->time.initial_time;
+	pthread_mutex_unlock(&p->pgm->time_mutex);
+	print_status(p, 'e');
+	ft_sleep(p->pgm->time_to_eat);
+	pthread_mutex_unlock(p->fork_left);
+	pthread_mutex_unlock(p->fork_right);
 }
+
+// static void	take_forks_and_eat(t_philo *p)
+// {
+// 	if (p->id % 2 != 0)
+// 	{
+// 		pthread_mutex_lock(p->fork_left);
+// 		print_status(p, 'l');
+// 		pthread_mutex_lock(p->fork_right);
+// 		print_status(p, 'r');
+// 		//rotate queue
+// 		p->nb_time_eaten++;
+// 		pthread_mutex_lock(&p->pgm->time_mutex);
+// 		p->last_eaten = get_time() - p->pgm->time.initial_time;
+// 		pthread_mutex_unlock(&p->pgm->time_mutex);
+// 		print_status(p, 'e');
+// 		ft_sleep(p->pgm->time_to_eat);
+// 		pthread_mutex_unlock(p->fork_left);
+// 		pthread_mutex_unlock(p->fork_right);
+// 	}
+// 	else
+// 	{
+// 		usleep(50);
+// 		pthread_mutex_lock(p->fork_left);
+// 		print_status(p, 'r');
+// 		pthread_mutex_lock(p->fork_right);
+// 		print_status(p, 'l');
+// 		p->nb_time_eaten++;
+// 		pthread_mutex_lock(&p->pgm->time_mutex);
+// 		p->last_eaten = get_time() - p->pgm->time.initial_time;
+// 		pthread_mutex_unlock(&p->pgm->time_mutex);
+// 		print_status(p, 'e');
+// 		ft_sleep(p->pgm->time_to_eat);
+// 		pthread_mutex_unlock(p->fork_left);
+// 		pthread_mutex_unlock(p->fork_right);
+// 	}
+// }
 
 static void	sleep_routine(t_philo *p)
 {
@@ -81,15 +99,40 @@ void	*routine(void *ptr)
 	while (1)
 	{
 		//faire un if ici avec si mon élément est le premier de ma queue
-		if (check_full(p))
-			break;
-		take_forks_and_eat(p);
-		if (check_full(p))
-			break;
-		sleep_routine(p);
-		if (check_full(p))
-			break;
-		print_status(p, 't');
+		//tout mettre dans la queue
+		if (p->pgm->queue[0] == p->id)
+		{
+			if (check_full(p))
+				break;
+			take_forks_and_eat(p);
+			if (check_full(p))
+				break;
+			sleep_routine(p);
+			if (check_full(p))
+				break;
+			print_status(p, 't');
+		}
 	}
 	return (NULL);
 }
+// void	*routine(void *ptr)
+// {
+// 	t_philo	*p;
+// 	p = ptr;
+// 	p->last_eaten = (get_time() - p->pgm->time.initial_time);
+// 	while (1)
+// 	{
+// 		//faire un if ici avec si mon élément est le premier de ma queue
+// 		//tout mettre dans la queue
+// 		if (check_full(p))
+// 			break;
+// 		take_forks_and_eat(p);
+// 		if (check_full(p))
+// 			break;
+// 		sleep_routine(p);
+// 		if (check_full(p))
+// 			break;
+// 		print_status(p, 't');
+// 	}
+// 	return (NULL);
+// }
