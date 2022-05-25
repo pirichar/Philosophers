@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/23 18:36:09 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/24 22:57:18 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,39 @@
 //***usleep est en MICRO SECONDE***
 //***LE USER ME DONNE EN MILISECONDE LES TEMPS**
 //***CHACUN DES CHIFFRES DOIT ETRE MULTIPLIER PAR 1000***
-void	destroy_mutex(t_pgm *pg)
+
+
+int	check_for_death(t_pgm *pg, int i)
 {
-	pg->i = 0;
-	while (pg->i < pg->nb_fork)
+	pg->actual_time = get_time() - pg->time.initial_time;
+	pthread_mutex_lock(&pg->death_mutex);
+	if (pg->actual_time >= (pg->philos[i].last_eaten + pg->time_to_die))
 	{
-		pthread_mutex_destroy(&pg->forks[pg->i]);
-		pg->i++;
+		pg->game_over = true;
+		pthread_mutex_unlock(&pg->death_mutex);	
+		print_status(&pg->philos[i], 'd');
+		return (1);
 	}
-	pthread_mutex_destroy(&pg->write_mutex);
-	pthread_mutex_destroy(&pg->time_mutex);
-	pthread_mutex_destroy(&pg->death_mutex);
-	pthread_mutex_destroy(&pg->full_mutex);
-	free(pg->th);
-	free(pg->philos);
-	free(pg->forks);
+	else
+		pthread_mutex_unlock(&pg->death_mutex);	
+	return (0);
 }
 
-int	join_thread(t_pgm *pg)
+int check_for_full(t_pgm *pg)
 {
-	pg->i = -1;
-	while (++pg->i < pg->nb_philos)
+	if (pg->nb_time_to_eat != 0)	
 	{
-		if (pthread_join(pg->th[pg->i], NULL) != 0)
-			return (2);
-	}	
+		pthread_mutex_lock(&pg->full_mutex);
+		if (pg->nb_full_philo >= pg->nb_philos)
+		{
+			pg->game_over = true;
+			printf("Everyone is now full🍝\n");
+			pthread_mutex_unlock(&pg->full_mutex);
+			return (1);
+		}
+		else
+			pthread_mutex_unlock(&pg->full_mutex);
+	}
 	return (0);
 }
 
@@ -50,44 +58,16 @@ int	check_for_end(t_pgm *pg)
 	i = 0;
 	while (1)
 	{
-		pg->actual_time = get_time() - pg->time.initial_time;
-		pthread_mutex_lock(&pg->death_mutex);
-		if (pg->actual_time >= (pg->philos[i].last_eaten + pg->time_to_die))
-		{
-			pg->game_over = true;
-			pthread_mutex_unlock(&pg->death_mutex);	
-			print_status(&pg->philos[i], 'd');
+		if (check_for_death(pg, i) == 1)
 			return (1);
-		}
-		pthread_mutex_unlock(&pg->death_mutex);	
-		pthread_mutex_lock(&pg->full_mutex);
-		if (pg->nb_full_philo >= pg->nb_philos)
-		{
-			pg->game_over = true;
-			printf("Everyone is now full🍝\n");
-			pthread_mutex_unlock(&pg->full_mutex);
+		if (check_for_full(pg) == 1)
 			return (1);
-		}
-		pthread_mutex_unlock(&pg->full_mutex);
 		if (i == pg->nb_philos - 1)
 			i = -1;
 		i++;
-		// usleep(500);
+		usleep(100);
 	}
 	return (0);
-}
-
-void	*one_philo_routine(void *ptr)
-{
-	t_philo	*p;
-
-	p = ptr;
-	pthread_mutex_lock(p->fork_left);
-	print_status(p, 'l');
-	ft_sleep(p->pgm->time_to_die);
-	print_status(p, 'd');
-	pthread_mutex_unlock(p->fork_left);
-	return (NULL);
 }
 
 int	main(int argc, char **argv)
@@ -112,6 +92,7 @@ int	main(int argc, char **argv)
 				join_thread(&pg);
 				destroy_mutex(&pg);
 				return (3);
+				// exit(3);
 			}
 		}
 		join_thread(&pg);

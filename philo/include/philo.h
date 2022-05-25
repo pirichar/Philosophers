@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/24 10:41:21 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/25 06:23:14 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,14 @@ void	ft_sleep(long time_to_sleep);
 void	create_philos(t_pgm *pg);
 int		run_all_threads(t_pgm *pg);
 void	init_pgm(t_pgm *pg, char **argv);
+void	destroy_mutex(t_pgm *pg);
+int		join_thread(t_pgm *pg);
 
 //routine.c
 void	*routine(void *ptr);
-
+void	*one_philo_routine(void *ptr);
 //queue.c
-int	*create_queue(int philo_count);
+int		*create_queue(int philo_count);
 void	rotate_queue(int *queue, int size);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:02:18 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/24 10:42:00 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/24 22:53:19 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,33 @@ int	run_all_threads(t_pgm *pg)
 		}
 		pg->i++;
 	}
+	return (0);
+}
+
+void	destroy_mutex(t_pgm *pg)
+{
+	pg->i = 0;
+	while (pg->i < pg->nb_fork)
+	{
+		pthread_mutex_destroy(&pg->forks[pg->i]);
+		pg->i++;
+	}
+	pthread_mutex_destroy(&pg->write_mutex);
+	pthread_mutex_destroy(&pg->time_mutex);
+	pthread_mutex_destroy(&pg->death_mutex);
+	pthread_mutex_destroy(&pg->full_mutex);
+	free(pg->th);
+	free(pg->philos);
+	free(pg->forks);
+}
+
+int	join_thread(t_pgm *pg)
+{
+	pg->i = -1;
+	while (++pg->i < pg->nb_philos)
+	{
+		if (pthread_join(pg->th[pg->i], NULL) != 0)
+			return (2);
+	}	
 	return (0);
 }

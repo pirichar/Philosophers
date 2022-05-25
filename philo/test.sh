@@ -16,22 +16,22 @@ gcc -Wall -Werror -Wextra -g ./src/*.c
 # ./a.out 3 601 200 200 5
 # ./a.out 4 401 200 200 
 # ./a.out 6 401 200 200 
-./a.out 5 601 200 200
-# ./a.out 7 610 200 200
+# ./a.out 5 620 200 200
+# ./a.out 7 800 200 200
 # ./a.out 3 601 200 200 5
 # 0		1	2	3	4 5
 
 
 # tests de correction
 #test avec 200 philos
-# ./a.out 200 800 200 200
+# ./a.out 199 800 200 200
 #this should die
 # ./a.out 1 800 200 200
 #this should run
-# ./a.out 5 800 200 200
+./a.out 5 800 200 200
 #this should run untill 7
 # ./a.out 5 800 200 200 7
 #no one should die
 # ./a.out 4 410 200 200
 #someone should die
-#./a.aout 4 310 200 100
+# ./a.out 4 310 200 100
