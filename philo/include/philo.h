@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/25 06:23:14 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/25 10:00:24 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_philo	t_philo;
 typedef struct s_time
 {
 	long	initial_time;
-	long	time_atm;
+	long	atm;
 	long	start_thinking;
 }				t_time;
 

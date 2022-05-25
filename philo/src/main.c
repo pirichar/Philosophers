@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/24 22:57:18 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/25 10:08:07 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 //***LE USER ME DONNE EN MILISECONDE LES TEMPS**
 //***CHACUN DES CHIFFRES DOIT ETRE MULTIPLIER PAR 1000***
 
-
 int	check_for_death(t_pgm *pg, int i)
 {
 	pg->actual_time = get_time() - pg->time.initial_time;
@@ -24,18 +23,18 @@ int	check_for_death(t_pgm *pg, int i)
 	if (pg->actual_time >= (pg->philos[i].last_eaten + pg->time_to_die))
 	{
 		pg->game_over = true;
-		pthread_mutex_unlock(&pg->death_mutex);	
+		pthread_mutex_unlock(&pg->death_mutex);
 		print_status(&pg->philos[i], 'd');
 		return (1);
 	}
 	else
-		pthread_mutex_unlock(&pg->death_mutex);	
+		pthread_mutex_unlock(&pg->death_mutex);
 	return (0);
 }
 
-int check_for_full(t_pgm *pg)
+int	check_for_full(t_pgm *pg)
 {
-	if (pg->nb_time_to_eat != 0)	
+	if (pg->nb_time_to_eat != 0)
 	{
 		pthread_mutex_lock(&pg->full_mutex);
 		if (pg->nb_full_philo >= pg->nb_philos)
@@ -65,7 +64,7 @@ int	check_for_end(t_pgm *pg)
 		if (i == pg->nb_philos - 1)
 			i = -1;
 		i++;
-		usleep(100);
+		usleep(500);
 	}
 	return (0);
 }
@@ -92,7 +91,6 @@ int	main(int argc, char **argv)
 				join_thread(&pg);
 				destroy_mutex(&pg);
 				return (3);
-				// exit(3);
 			}
 		}
 		join_thread(&pg);

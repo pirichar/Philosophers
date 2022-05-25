@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/25 06:29:44 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/25 10:10:09 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 static bool	check_full(t_philo *p)
 {
-	bool gameover;
+	bool	gameover;
 
 	if (p->pgm->max_eat == true)
 	{
 		pthread_mutex_lock(&p->pgm->full_mutex);
-		if (p->nb_time_eaten >= p->pgm->nb_time_to_eat) 
+		if (p->nb_time_eaten >= p->pgm->nb_time_to_eat)
 		{
 			p->is_full = 1;
 			p->pgm->nb_full_philo++;
@@ -75,7 +75,6 @@ static void	sleep_routine(t_philo *p)
 	ft_sleep(p->pgm->time_to_sleep);
 }
 
-
 // void	*routine(void *ptr)
 // {
 // 	t_philo	*p;
@@ -100,23 +99,25 @@ static void	sleep_routine(t_philo *p)
 // 	}
 // 	return (NULL);
 // }
+
 void	*routine(void *ptr)
 {
 	t_philo	*p;
+
 	p = ptr;
 	p->last_eaten = (get_time() - p->pgm->time.initial_time);
 	while (1)
 	{
 		if (check_full(p))
-			break;
+			break ;
 		if (p->id % 2 == 0)
 			usleep(50);
 		take_forks_and_eat(p);
 		if (check_full(p))
-			break;
+			break ;
 		sleep_routine(p);
 		if (check_full(p))
-			break;
+			break ;
 		print_status(p, 't');
 	}
 	return (NULL);
