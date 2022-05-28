@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/25 10:08:07 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/28 13:03:24 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ int	check_for_death(t_pgm *pg, int i)
 
 int	check_for_full(t_pgm *pg)
 {
-	if (pg->nb_time_to_eat != 0)
-	{
+
 		pthread_mutex_lock(&pg->full_mutex);
 		if (pg->nb_full_philo >= pg->nb_philos)
 		{
@@ -46,7 +45,6 @@ int	check_for_full(t_pgm *pg)
 		}
 		else
 			pthread_mutex_unlock(&pg->full_mutex);
-	}
 	return (0);
 }
 
@@ -59,12 +57,15 @@ int	check_for_end(t_pgm *pg)
 	{
 		if (check_for_death(pg, i) == 1)
 			return (1);
-		if (check_for_full(pg) == 1)
-			return (1);
+		if (pg->nb_time_to_eat != 0)
+		{	
+			if (check_for_full(pg) == 1)
+				return (1);
+		}
 		if (i == pg->nb_philos - 1)
 			i = -1;
 		i++;
-		usleep(500);
+		// usleep(100);
 	}
 	return (0);
 }
@@ -81,19 +82,21 @@ int	main(int argc, char **argv)
 			return (1);
 		init_pgm(&pg, argv);
 		if (pg.nb_philos == 1)
+		{
 			pthread_create(&pg.th[0], NULL, &one_philo_routine, &pg.philos[0]);
+			pthread_join(pg.th[0],NULL);
+			destroy_mutex(&pg);
+		}
 		else
 		{
 			if (run_all_threads(&pg) != 0)
 				return (2);
 			if (check_for_end(&pg) == 1)
 			{
-				join_thread(&pg);
 				destroy_mutex(&pg);
 				return (3);
 			}
 		}
-		join_thread(&pg);
 	}
 	return (0);
 }

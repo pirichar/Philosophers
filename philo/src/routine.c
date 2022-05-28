@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/25 10:10:09 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/28 13:00:39 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,36 +32,16 @@ static bool	check_full(t_philo *p)
 	return (gameover);
 }
 
-// static void	take_forks_and_eat(t_philo *p)
-// {
-// 	pthread_mutex_lock(p->fork_left);
-// 	print_status(p, 'l');
-// 	pthread_mutex_lock(p->fork_right);
-// 	print_status(p, 'r');
-// 	rotate_queue(p->pgm->queue, p->pgm->nb_philos);
-// 	p->nb_time_eaten++;
-// 	pthread_mutex_lock(&p->pgm->death_mutex);
-// 	pthread_mutex_lock(&p->pgm->time_mutex);
-// 	p->last_eaten = get_time() - p->pgm->time.initial_time;
-// 	pthread_mutex_unlock(&p->pgm->time_mutex);
-// 	pthread_mutex_unlock(&p->pgm->death_mutex);
-// 	print_status(p, 'e');
-// 	ft_sleep(p->pgm->time_to_eat);
-// 	pthread_mutex_unlock(p->fork_left);
-// 	pthread_mutex_unlock(p->fork_right);
-// }
-
 static void	take_forks_and_eat(t_philo *p)
 {
 	pthread_mutex_lock(p->fork_left);
 	print_status(p, 'l');
 	pthread_mutex_lock(p->fork_right);
 	print_status(p, 'r');
+	rotate_queue(p->pgm->queue, p->pgm->nb_philos);
 	p->nb_time_eaten++;
 	pthread_mutex_lock(&p->pgm->death_mutex);
-	pthread_mutex_lock(&p->pgm->time_mutex);
 	p->last_eaten = get_time() - p->pgm->time.initial_time;
-	pthread_mutex_unlock(&p->pgm->time_mutex);
 	pthread_mutex_unlock(&p->pgm->death_mutex);
 	print_status(p, 'e');
 	ft_sleep(p->pgm->time_to_eat);
@@ -69,59 +49,73 @@ static void	take_forks_and_eat(t_philo *p)
 	pthread_mutex_unlock(p->fork_right);
 }
 
+// static void	take_forks_and_eat(t_philo *p)
+// {
+// 	pthread_mutex_lock(p->fork_left);
+// 	print_status(p, 'l');
+// 	pthread_mutex_lock(p->fork_right);
+// 	print_status(p, 'r');
+// 	p->nb_time_eaten++;
+// 	pthread_mutex_lock(&p->pgm->death_mutex);
+// 	p->last_eaten = get_time() - p->pgm->time.initial_time;
+// 	pthread_mutex_unlock(&p->pgm->death_mutex);
+// 	print_status(p, 'e');
+// 	ft_sleep(p->pgm->time_to_eat);
+// 	pthread_mutex_unlock(p->fork_left);
+// 	pthread_mutex_unlock(p->fork_right);
+// }
+
 static void	sleep_routine(t_philo *p)
 {
 	print_status(p, 's');
 	ft_sleep(p->pgm->time_to_sleep);
 }
 
-// void	*routine(void *ptr)
-// {
-// 	t_philo	*p;
-// 	p = ptr;
-// 	// pthread_mutex_lock(&p->pgm->time_mutex);
-// 	p->last_eaten = (get_time() - p->pgm->time.initial_time);
-// 	// pthread_mutex_unlock(&p->pgm->time_mutex);
-// 	while (1)
-// 	{
-// 		if (p->pgm->queue[0] == p->id)
-// 		{
-// 			if (check_full(p))
-// 				break;
-// 			take_forks_and_eat(p);
-// 			if (check_full(p))
-// 				break;
-// 			sleep_routine(p);
-// 			if (check_full(p))
-// 				break;
-// 			print_status(p, 't');
-// 		}
-// 	}
-// 	return (NULL);
-// }
-
 void	*routine(void *ptr)
 {
 	t_philo	*p;
-
 	p = ptr;
 	p->last_eaten = (get_time() - p->pgm->time.initial_time);
 	while (1)
 	{
-		if (check_full(p))
-			break ;
-		if (p->id % 2 == 0)
-			usleep(50);
-		take_forks_and_eat(p);
-		if (check_full(p))
-			break ;
-		sleep_routine(p);
-		if (check_full(p))
-			break ;
-		print_status(p, 't');
+		if (p->pgm->queue[0] == p->id)
+		{
+			if (check_full(p))
+				break;
+			take_forks_and_eat(p);
+			if (check_full(p))
+				break;
+			sleep_routine(p);
+			if (check_full(p))
+				break;
+			print_status(p, 't');
+		}
 	}
 	return (NULL);
 }
+
+// void	*routine(void *ptr)
+// {
+// 	t_philo	*p;
+
+// 	p = ptr;
+// 	p->last_eaten = (get_time() - p->pgm->time.initial_time);
+// 	while (1)
+// 	{
+// 		if (check_full(p))
+// 			break ;
+// 		if (p->id % 2 == 0)
+// 			usleep(50);
+// 		take_forks_and_eat(p);
+// 		if (check_full(p))
+// 			break ;
+// 		sleep_routine(p);
+// 		if (check_full(p))
+// 			break ;
+// 		print_status(p, 't');
+// 	}
+// 	return (NULL);
+// }
 
 void	*one_philo_routine(void *ptr)
 {

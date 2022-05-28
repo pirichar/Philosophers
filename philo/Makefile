@@ -6,7 +6,7 @@
 #    By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/25 10:15:19 by pirichar          #+#    #+#              #
-#    Updated: 2022/05/25 10:19:35 by pirichar         ###   ########.fr        #
+#    Updated: 2022/05/28 13:05:06 by pirichar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ VPATH		= $(SRC)
 
 
 CC			= gcc
-CFLAGS		= -Wall -Werror -Wextra -g
+CFLAGS		= -Wall -Werror -Wextra -g -pthread 
 RM			= rm -rf
 
 $(OBJ)/%.o:	%.c 

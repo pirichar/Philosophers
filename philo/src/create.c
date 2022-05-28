@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:02:18 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/25 10:02:43 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/28 13:09:26 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,17 @@ int	run_all_threads(t_pgm *pg)
 		pg->i++;
 	}
 	return (0);
+	pg->i = 0;
+	while (pg->i < pg->nb_philos)
+	{
+		if (pthread_detach(pg->th[pg->i]) != 0)
+		{
+			printf("Failed to deatch thread\n");
+			return (1);
+		}
+		pg->i++;
+	}
+	return (0);
 }
 
 void	destroy_mutex(t_pgm *pg)
@@ -82,6 +93,7 @@ void	destroy_mutex(t_pgm *pg)
 	free(pg->th);
 	free(pg->philos);
 	free(pg->forks);
+	free(pg->queue);
 }
 
 int	join_thread(t_pgm *pg)

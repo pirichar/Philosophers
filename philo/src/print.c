@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:09:50 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/25 10:01:25 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/28 13:08:52 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,37 @@ void	print_initiation(t_pgm *pg)
 // ca va juste me prendre un strcomp + passer ce que je veux imprimmer 
 //comme du monde je pourrais ausi faire une fonction qui retourne 
 //le time stamp actuel au lieu de faire get time ici
+// void	print_status(t_philo *p, char status)
+// {
+// 	pthread_mutex_lock(&p->pgm->death_mutex);
+// 	// pthread_mutex_lock(&p->pgm->write_mutex);
+// 	if (p->pgm->game_over == false || status == 'd')
+// 	{
+// 		p->pgm->time.atm = get_time() - p->pgm->time.initial_time;
+// 		if (status == 'l')
+// 			printf(HGRN"%ld %d has taken a fork🍴\n"RESET,
+// 				(p->pgm->time.atm), p->id);
+// 		if (status == 'r')
+// 			printf(HGRN"%ld %d has taken a fork🍴\n"RESET,
+// 				(p->pgm->time.atm), p->id);
+// 		if (status == 'e')
+// 			printf(HBLU"%ld %d is eating 🍆 and has eaten %d times ⏰\n"RESET,
+// 				(p->pgm->time.atm), p->id, p->nb_time_eaten);
+// 		if (status == 's')
+// 			printf(HMAG"%ld %d is sleeping😴\n"RESET, (p->pgm->time.atm), p->id);
+// 		if (status == 't')
+// 			printf(HCYN"%ld %d is thinking💡\n"RESET, (p->pgm->time.atm), p->id);
+// 		if (status == 'd')
+// 			printf(HRED"%ld %d is dead 💀\n"RESET, (p->pgm->time.atm), p->id);
+// 	}
+// 	pthread_mutex_unlock(&p->pgm->death_mutex);
+// 	// pthread_mutex_unlock(&p->pgm->write_mutex);
+// }
 void	print_status(t_philo *p, char status)
 {
 	pthread_mutex_lock(&p->pgm->death_mutex);
 	pthread_mutex_lock(&p->pgm->write_mutex);
+	pthread_mutex_lock(&p->pgm->full_mutex);
 	if (p->pgm->game_over == false || status == 'd')
 	{
 		p->pgm->time.atm = get_time() - p->pgm->time.initial_time;
@@ -43,8 +70,8 @@ void	print_status(t_philo *p, char status)
 			printf(HGRN"%ld %d has taken a fork🍴\n"RESET,
 				(p->pgm->time.atm), p->id);
 		if (status == 'e')
-			printf(HBLU"%ld %d is eating 🍆 and has eaten %d times ⏰\n"RESET,
-				(p->pgm->time.atm), p->id, p->nb_time_eaten);
+			printf(HBLU"%ld %d is eating 🍆\n"RESET,
+				(p->pgm->time.atm), p->id);
 		if (status == 's')
 			printf(HMAG"%ld %d is sleeping😴\n"RESET, (p->pgm->time.atm), p->id);
 		if (status == 't')
@@ -54,6 +81,7 @@ void	print_status(t_philo *p, char status)
 	}
 	pthread_mutex_unlock(&p->pgm->death_mutex);
 	pthread_mutex_unlock(&p->pgm->write_mutex);
+	pthread_mutex_unlock(&p->pgm->full_mutex);
 }
 
 void	print_time(t_philo *p)
