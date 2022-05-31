@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/25 10:00:24 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/31 12:11:33 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,38 +68,39 @@ typedef struct s_philo
 	pthread_mutex_t	*fork_right;
 }				t_philo;
 
-
-//main.c
-
+//check.c
+int			check_for_death(t_pgm *pg, int i);
+int			check_for_full(t_pgm *pg);
+int			check_for_end(t_pgm *pg);
+static bool	check_full(t_philo *p);
 
 //print.c
-void	print_time(t_philo *p);
-void	print_status(t_philo *p, char status);
-void	print_initiation(t_pgm *pg);
+void		print_time(t_philo *p);
+void		print_status(t_philo *p, char status);
+void		print_initiation(t_pgm *pg);
 
 //parse.c
-int		ft_atoi(char *str);
-int		check_int(char *str);
-int		validate_input(int argc, char **argv);
-int		parse_input(int argc, char **argv, t_pgm *pg);
-
+int			ft_atoi(char *str);
+int			check_int(char *str);
+int			validate_input(int argc, char **argv);
+int			parse_input(int argc, char **argv, t_pgm *pg);
 
 //time.c
-long	get_time(void);
-void	ft_sleep(long time_to_sleep);
+long		get_time(void);
+void		ft_sleep(long time_to_sleep, t_philo *p);
 
 //create.c
-void	create_philos(t_pgm *pg);
-int		run_all_threads(t_pgm *pg);
-void	init_pgm(t_pgm *pg, char **argv);
-void	destroy_mutex(t_pgm *pg);
-int		join_thread(t_pgm *pg);
+void		create_philos(t_pgm *pg);
+int			run_all_threads(t_pgm *pg);
+void		init_pgm(t_pgm *pg, char **argv);
+void		destroy_mutex(t_pgm *pg);
+int			join_thread(t_pgm *pg);
 
 //routine.c
-void	*routine(void *ptr);
-void	*one_philo_routine(void *ptr);
+void		*routine(void *ptr);
+void		*one_philo_routine(void *ptr);
 //queue.c
-int		*create_queue(int philo_count);
-void	rotate_queue(int *queue, int size);
+int			*create_queue(int philo_count);
+void		rotate_queue(int *queue, int size);
 
 #endif

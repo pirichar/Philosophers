@@ -6,7 +6,7 @@
 #    By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/25 10:15:19 by pirichar          #+#    #+#              #
-#    Updated: 2022/05/28 13:05:06 by pirichar         ###   ########.fr        #
+#    Updated: 2022/05/31 12:04:31 by pirichar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAME = philo
 SRC			= src
 INC			= include
 OBJ			= obj
-CFILES		= create.c main.c parsing.c print.c queue.c routine.c time.c
+CFILES		= create.c main.c parsing.c print.c queue.c routine.c time.c check.c
 HFILES		= colors.h philo.h
 OFILES		= $(CFILES:.c=.o)
 SRCS		= $(addprefix $(SRC)/, $(CFILES))
