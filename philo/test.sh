@@ -12,12 +12,12 @@ make re
 # for i in {0..50}; do ./test.sh; done;
 # ./philo 2 400 200 200 
 # ./philo 2 401 200 200 
-./philo 3 400 200 200 
+# ./philo 3 400 200 200 
 # ./philo 3 600 200 200 
 # ./philo 3 601 200 200 
 # ./philo 3 601 200 200 5
 # ./philo 4 401 200 200 
-# ./philo 6 401 200 200 
+# ./philo 6 410 200 200 
 # ./philo 5 610 200 200
 # ./philo 7 1000 200 200
 # ./philo 7 800 200 200
@@ -36,7 +36,7 @@ make re
 #this should run untill 7
 # ./philo 5 800 200 200 7
 #no one should die
-# ./philo 4 410 200 200
+./philo 4 410 200 200
 #someone should die
 # ./philo 4 310 200 100
 

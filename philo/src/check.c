@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 11:59:30 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 12:11:39 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/31 12:26:57 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	check_for_end(t_pgm *pg)
 }
 
 // fonction appellée par la fonction de routine pour vérifier son état
-static bool	check_full(t_philo *p)
+bool	check_full(t_philo *p)
 {
 	bool	gameover;
 
