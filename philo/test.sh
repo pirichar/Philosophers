@@ -11,7 +11,9 @@
 make re
 # for i in {0..50}; do ./test.sh; done;
 # ./philo 2 400 200 200 
-# ./philo 2 401 200 200 
+#trouve le bogue avec 2 401 200 200 1
+# for i in {1..100}; do ./test.sh; done
+./philo 2 401 200 200 1   
 # ./philo 3 400 200 200 
 # ./philo 3 600 200 200 
 # ./philo 3 601 200 200 
@@ -29,11 +31,11 @@ make re
 
 # tests de correction
 #test avec 200 philos
-# ./philo 200 8000 200 200
-# ./philo 100 8000 200 200
+# ./philo 200 800 200 200
+# ./philo 150 1000 200 200
 #this should die
 # ./philo 1 600 200 200 1
-# ./philo 0 600 200 200 
+# ./philo 2 400 200 200  1
 #this should run
 # ./philo 5 800 200 200
 #this should run untill 7

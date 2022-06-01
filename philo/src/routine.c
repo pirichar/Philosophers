@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/01 10:12:27 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/01 14:51:13 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,10 @@ static int	take_forks_and_eat(t_philo *p)
 		pthread_mutex_unlock(p->fork_left);
 		return (1);
 	}
-	// rotate_queue(p->pgm->queue, p->pgm->nb_philos);	
-	p->nb_time_eaten++;
 	pthread_mutex_lock(&p->pgm->death_mutex);
 	p->last_eaten = get_time() - p->pgm->time.initial_time;
 	pthread_mutex_unlock(&p->pgm->death_mutex);
+	p->nb_time_eaten++;
 	if (check_full(p))
 	{
 		pthread_mutex_unlock(p->fork_left);
@@ -97,7 +96,8 @@ void	*routine(void *ptr)
 		if (check_full(p))
 			break ;
 		if (p->id % 2 != 0)
-			usleep(p->pgm->time_to_die / 10);
+			// usleep(p->pgm->time_to_die / 10);
+			usleep(100);
 		if (take_forks_and_eat(p) != 0)
 			break ;
 		if (check_full(p))

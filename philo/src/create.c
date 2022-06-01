@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:02:18 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/01 13:19:13 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/01 14:19:07 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	init_pgm(t_pgm *pg, char **argv)
 {
 	pg->nb_philos = ft_atoi(argv[1]);
+	// if (pg->nb_philos == 0)
+	// 	return (1);
 	pg->nb_fork = pg->nb_philos;
 	pg->game_over = false;
 	pg->nb_full_philo = 0;
@@ -32,6 +34,7 @@ void	init_pgm(t_pgm *pg, char **argv)
 	pg->time.initial_time = get_time();
 	print_initiation(pg);
 	create_philos(pg);
+	// return (0);
 }
 
 void	create_philos(t_pgm *p)

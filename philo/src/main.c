@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:07:34 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/01 10:46:54 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/01 14:19:38 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ void	a_lonely_life(t_pgm *pg)
 int	main(int argc, char **argv)
 {
 	t_pgm	pg;
-
+	// if argv[1] == 0 
 	if (argc == 5 || argc == 6)
 	{
 		if (parse_input(argc, argv, &pg) != 0)
 			return (1);
-		init_pgm(&pg, argv);
+		init_pgm(&pg, argv); // return in here
 		if (pg.nb_philos == 1)
 			a_lonely_life(&pg);
 		else

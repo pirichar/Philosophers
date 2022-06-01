@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 11:59:30 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/01 08:37:18 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/01 14:50:49 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	check_for_end(t_pgm *pg)
 		if (i == pg->nb_philos - 1)
 			i = -1;
 		i++;
-		usleep(40);
+		usleep(100);
 	}
 	return (0);
 }
