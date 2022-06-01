@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:09:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 12:25:11 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/01 16:29:50 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct s_philo
 int			check_for_death(t_pgm *pg, int i);
 int			check_for_full(t_pgm *pg);
 int			check_for_end(t_pgm *pg);
-bool	check_full(t_philo *p);
+bool		check_full(t_philo *p);
 
 //print.c
 void		print_time(t_philo *p);

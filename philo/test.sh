@@ -13,17 +13,17 @@ make re
 # ./philo 2 400 200 200 
 #trouve le bogue avec 2 401 200 200 1
 # for i in {1..100}; do ./test.sh; done
-./philo 2 401 200 200 1   
+# ./philo 2 401 200 200 1   
 # ./philo 3 400 200 200 
 # ./philo 3 600 200 200 
-# ./philo 3 601 200 200 
+# ./philo 3 601 200 200 1
 # ./philo 3 601 200 200 5
 # ./philo 4 410 200 200 
 # ./philo 6 410 200 200 
 # ./philo 5 610 200 200
 # ./philo 7 1000 200 200
 # ./philo 7 610 200 200
-# ./philo 0 800 200 200
+./philo 0 800 200 200
 # ./philo 20 800 100 100
 # ./philo 3 601 200 200 5
 # 0		1	2	3	4 5

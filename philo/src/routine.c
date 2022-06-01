@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/01 14:51:13 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/01 16:33:46 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,7 @@ void	*routine(void *ptr)
 	{
 		if (check_full(p))
 			break ;
-		if (p->id % 2 != 0)
-			// usleep(p->pgm->time_to_die / 10);
+		if (p->id % 2 == 0)
 			usleep(100);
 		if (take_forks_and_eat(p) != 0)
 			break ;

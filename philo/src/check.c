@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 11:59:30 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/01 14:50:49 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/01 16:29:43 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ bool	check_full(t_philo *p)
 	if (p->pgm->max_eat == true)
 	{
 		pthread_mutex_lock(&p->pgm->full_mutex);
-		if (p->nb_time_eaten >= p->pgm->nb_time_to_eat)
+		if (p->nb_time_eaten >= p->pgm->nb_time_to_eat && p->is_full == 0)
 		{
 			p->is_full = 1;
 			p->pgm->nb_full_philo++;
