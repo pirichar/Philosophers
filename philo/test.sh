@@ -16,11 +16,13 @@ make re
 # ./philo 3 600 200 200 
 # ./philo 3 601 200 200 
 # ./philo 3 601 200 200 5
-./philo 4 401 200 200 
+# ./philo 4 410 200 200 
 # ./philo 6 410 200 200 
 # ./philo 5 610 200 200
 # ./philo 7 1000 200 200
 # ./philo 7 610 200 200
+# ./philo 0 800 200 200
+# ./philo 20 800 100 100
 # ./philo 3 601 200 200 5
 # 0		1	2	3	4 5
 
@@ -30,7 +32,8 @@ make re
 # ./philo 200 8000 200 200
 # ./philo 100 8000 200 200
 #this should die
-# ./philo 1 800 200 200
+# ./philo 1 600 200 200 1
+# ./philo 0 600 200 200 
 #this should run
 # ./philo 5 800 200 200
 #this should run untill 7
