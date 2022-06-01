@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 10:44:32 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 15:25:02 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/31 22:08:24 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ static void	sleep_routine(t_philo *p)
 // void	*routine(void *ptr)
 // {
 // 	t_philo	*p;
-	
 // 	p = ptr;
 // 	p->last_eaten = (get_time() - p->pgm->time.initial_time);
 // 	while (1)
@@ -115,7 +114,7 @@ void	*routine(void *ptr)
 		if (check_full(p))
 			break ;
 		if (p->id % 2 == 0)
-			usleep(p->pgm->time_to_die / 10);
+			usleep(p->pgm->time_to_die / 100);
 		if (take_forks_and_eat(p) != 0)
 			break ;
 		if (check_full(p))
